@@ -78,7 +78,7 @@ export type ProjectOpenResult = z.infer<typeof ProjectOpenResult>;
 // --- Window API type (used by renderer via preload) ---
 
 export interface HiccApi {
-  readFile: (filePath: string) => Promise<string>;
+  readFile: (filePath: string, offset?: number, limit?: number) => Promise<string>;
   writeFile: (filePath: string, content: string) => Promise<void>;
   deleteFile: (filePath: string) => Promise<void>;
   listFiles: (dirPath: string, depth?: number) => Promise<FileNode[]>;

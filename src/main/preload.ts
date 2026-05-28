@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 const api = {
-  readFile: (filePath: string) => ipcRenderer.invoke('file:read', filePath),
+  readFile: (filePath: string, offset?: number, limit?: number) => ipcRenderer.invoke('file:read', filePath, offset, limit),
   writeFile: (filePath: string, content: string) => ipcRenderer.invoke('file:write', filePath, content),
   deleteFile: (filePath: string) => ipcRenderer.invoke('file:delete', filePath),
   listFiles: (dirPath: string, depth?: number) => ipcRenderer.invoke('file:list', dirPath, depth),
