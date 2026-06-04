@@ -1,0 +1,74 @@
+.container {
+  padding: 12px 16px 10px;
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+}
+
+.textarea {
+  width: 100%;
+  padding: 10px 0;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  min-height: 72px;
+  max-height: 200px;
+  box-sizing: border-box;
+  line-height: 1.55;
+}
+
+.textarea::placeholder {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.attachmentArea {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.dropIndicator {
+  border: 2px dashed var(--accent-color);
+  border-radius: var(--radius-md);
+  background: rgba(88, 166, 255, 0.04);
+}
+
+.slashDropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0; right: 0;
+  margin-bottom: 6px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 50;
+  box-shadow: var(--shadow-md);
+  padding: 4px;
+}
+
+.slashItem {
+  display: flex; gap: 12px;
+  padding: 8px 12px; cursor: pointer;
+  font-size: 13px; border-radius: var(--radius-md);
+  transition: background 0.1s;
+}
+.slashItem:hover,
+.slashItemActive {
+  background: rgba(88, 166, 255, 0.08);
+}
+
+.slashCmd {
+  color: var(--accent-color);
+  font-weight: 600;
+  min-width: 100px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.slashDesc { color: var(--text-secondary); font-size: 12px; }

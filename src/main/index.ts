@@ -4,24 +4,36 @@ import { registerAllIpcHandlers } from './ipc/index';
 import { setFileSystemService } from './ipc/file';
 import { setAnthropicClient } from './ipc/ai';
 import { setTerminalManager } from './ipc/terminal';
+import { setProjectDependencies, setProjectWindow } from './ipc/project';
 import { FileSystemService } from './services/file-system';
+import { RemoteFileSystemService } from './services/remote-file-system';
+import { GitService } from './services/git-service';
+import { SvnService } from './services/svn-service';
 import { FileWatcherService } from './services/file-watcher';
 import { AnthropicClient } from './services/anthropic-client';
-import { ToolExecutor } from './services/tool-executor';
 import { TerminalManager } from './services/terminal-manager';
-import { getApiKey } from './store/config-store';
+import { getActiveProfile, migrateProfilesCleanAnsi } from './store/config-store';
+import { setRemoteFileSystemService } from './ipc/sftp';
+import { setGitService } from './ipc/git';
+import { setSvnService } from './ipc/svn';
 
 let mainWindow: BrowserWindow | null = null;
 
 const fileSystem = new FileSystemService('');
-const toolExecutor = new ToolExecutor(fileSystem);
-const anthropicClient = new AnthropicClient(fileSystem, toolExecutor);
+const remoteFileSystem = new RemoteFileSystemService();
+const gitService = new GitService();
+const svnService = new SvnService();
+const anthropicClient = new AnthropicClient(fileSystem);
 const fileWatcher = new FileWatcherService();
 const terminalManager = new TerminalManager();
 
 setFileSystemService(fileSystem);
+setRemoteFileSystemService(remoteFileSystem);
+setGitService(gitService);
+setSvnService(svnService);
 setAnthropicClient(anthropicClient);
 setTerminalManager(terminalManager);
+setProjectDependencies(fileSystem, anthropicClient, fileWatcher, gitService, svnService);
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -29,6 +41,7 @@ function createWindow() {
     height: 900,
     minWidth: 900,
     minHeight: 600,
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -42,21 +55,32 @@ function createWindow() {
     mainWindow = null;
   });
 
+  setProjectWindow(mainWindow);
+
+  // Prevent Electron's default context menu so Monaco's custom menu is visible
+  mainWindow.webContents.on('context-menu', (e) => e.preventDefault());
+
+  // Debug: forward renderer console to main process terminal
+  mainWindow.webContents.on('console-message', (_event, level, message) => {
+    const prefix = level === 3 ? '[RDR-ERR]' : '[RDR-LOG]';
+    console.log(prefix, message);
+  });
+
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:5173');
-    mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+    mainWindow.loadFile(path.join(__dirname, '../../renderer/index.html'));
   }
 }
 
 app.whenReady().then(() => {
-  const apiKey = getApiKey();
-  if (apiKey) {
-    anthropicClient.setApiKey(apiKey);
+  migrateProfilesCleanAnsi();
+  const activeProfile = getActiveProfile();
+  if (activeProfile) {
+    anthropicClient.applyProfile(activeProfile, activeProfile.systemPrompt);
   }
 
-  registerAllIpcHandlers();
+  registerAllIpcHandlers(anthropicClient);
   createWindow();
 });
 

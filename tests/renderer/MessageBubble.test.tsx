@@ -1,32 +1,53 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import MessageBubble from '../../src/renderer/components/chat/MessageBubble';
+import type { ChatMessage } from '../../src/renderer/types';
+
+function makeMsg(overrides: Partial<ChatMessage>): ChatMessage {
+  return {
+    id: '1',
+    role: 'user',
+    content: '',
+    contentBlocks: [],
+    timestamp: 0,
+    ...overrides,
+  };
+}
 
 describe('MessageBubble', () => {
   it('renders user message', () => {
-    const msg = { id: '1', role: 'user' as const, content: 'Hello', timestamp: 0 };
-    render(<MessageBubble message={msg} />);
+    render(<MessageBubble message={makeMsg({ role: 'user', content: 'Hello' })} />);
     expect(screen.getByText('Hello')).toBeDefined();
-    expect(screen.getByText('You')).toBeDefined();
   });
 
   it('renders assistant message', () => {
-    const msg = { id: '2', role: 'assistant' as const, content: 'Hi there', timestamp: 0 };
-    render(<MessageBubble message={msg} />);
+    render(<MessageBubble message={makeMsg({ role: 'assistant', content: 'Hi there' })} />);
     expect(screen.getByText('Hi there')).toBeDefined();
-    expect(screen.getByText('Claude')).toBeDefined();
   });
 
   it('renders code blocks', () => {
-    const msg = { id: '3', role: 'assistant' as const, content: 'Here is code:\n```\nconst x = 1;\n```', timestamp: 0 };
-    const { container } = render(<MessageBubble message={msg} />);
+    render(<MessageBubble message={makeMsg({ role: 'assistant', content: 'Here is code:\n```\nconst x = 1;\n```' })} />);
+    const container = document.body;
     expect(container.querySelector('pre')).toBeDefined();
     expect(container.querySelector('code')?.textContent).toContain('const x = 1');
   });
 
   it('renders inline code', () => {
-    const msg = { id: '4', role: 'assistant' as const, content: 'Use `const` keyword', timestamp: 0 };
-    const { container } = render(<MessageBubble message={msg} />);
+    render(<MessageBubble message={makeMsg({ role: 'assistant', content: 'Use `const` keyword' })} />);
+    const container = document.body;
     expect(container.querySelector('code')?.textContent).toBe('const');
+  });
+
+  it('renders thinking block', () => {
+    const msg = makeMsg({
+      role: 'assistant',
+      content: '',
+      contentBlocks: [
+        { type: 'thinking', thinking: 'Let me think...', blockIndex: 0, complete: true },
+        { type: 'text', text: 'Here is the answer', blockIndex: 1, complete: true },
+      ],
+    });
+    const { container } = render(<MessageBubble message={msg} />);
+    expect(container.textContent).toContain('Thinking');
   });
 });

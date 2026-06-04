@@ -1,0 +1,150 @@
+.dialog {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px 18px;
+  min-width: 360px;
+  max-width: 500px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+.title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.description {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.inputPreview {
+  background: var(--bg-primary);
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  max-height: 150px;
+  overflow: auto;
+  white-space: pre-wrap;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.rejectButton {
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.allowButton {
+  padding: 6px 20px;
+  border-radius: 6px;
+  border: none;
+  background: var(--accent-color);
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.alwaysButton {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--accent-color);
+  background: transparent;
+  color: var(--accent-color);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* AskUserQuestion */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.questionBlock {
+  margin-bottom: 14px;
+}
+
+.questionHeader {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-color);
+  margin-bottom: 4px;
+}
+
+.questionText {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.questionOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.questionOption {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.questionOption:hover {
+  background: var(--bg-tertiary);
+}
+
+.questionOptionSelected {
+  border-color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+}
+
+.radio {
+  margin-top: 1px;
+  accent-color: var(--accent-color);
+}
+
+.optionLabel {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.optionDesc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}

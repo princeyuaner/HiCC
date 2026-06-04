@@ -8,19 +8,21 @@ const Sidebar: React.FC = () => {
   const items = [
     { id: 'files' as const, label: 'Files', icon: '📁' },
     { id: 'search' as const, label: 'Search', icon: '🔍' },
-    { id: 'settings' as const, label: 'Settings', icon: '⚙' },
+    { id: 'git' as const, label: 'Git', icon: '🔀' },
+    { id: 'review' as const, label: 'Review', icon: '🛡' },
+    { id: 'svn' as const, label: 'SVN', icon: '🔃' },
   ];
 
   return (
     <div style={{
       width: 48,
-      background: 'var(--bg-tertiary)',
+      background: 'var(--bg-secondary)',
       borderRight: '1px solid var(--border-color)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      paddingTop: 8,
-      gap: 4,
+      paddingTop: 10,
+      gap: 2,
     }}>
       {items.map((item) => (
         <button
@@ -34,12 +36,12 @@ const Sidebar: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'center',
             border: 'none',
-            borderRadius: 4,
-            background: activeSidebar === item.id ? 'var(--accent-color)' : 'transparent',
-            color: 'var(--text-primary)',
+            borderRadius: 8,
+            background: activeSidebar === item.id ? 'rgba(88, 166, 255, 0.12)' : 'transparent',
+            color: activeSidebar === item.id ? 'var(--accent-color)' : 'var(--text-muted)',
             cursor: 'pointer',
-            fontSize: 18,
-            opacity: activeSidebar === item.id ? 1 : 0.6,
+            fontSize: 16,
+            transition: 'all 0.15s ease',
           }}
         >
           {item.icon}

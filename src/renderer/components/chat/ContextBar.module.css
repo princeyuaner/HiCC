@@ -1,0 +1,94 @@
+.wrapper {
+  padding: 6px 14px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.mainRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.track {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg-tertiary);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease, background 0.5s ease;
+}
+
+.tokenText {
+  font-size: 11px;
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.tokenLimit {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.pct {
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  min-width: 34px;
+  text-align: right;
+}
+
+.cost {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.attachButton {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.attachButton:hover {
+  background: var(--bg-tertiary);
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.filesToggle {
+  padding: 2px 8px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color); background: transparent;
+  color: var(--text-muted); cursor: pointer; font-size: 11px;
+  white-space: nowrap; transition: all 0.15s;
+}
+.filesToggle:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+
+.filesList {
+  margin-top: 6px; padding-top: 6px;
+  border-top: 1px solid var(--border-subtle);
+  max-height: 150px; overflow-y: auto;
+}
+.fileEntry {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 2px 0; font-size: 11px;
+}
+.fileName {
+  font-family: var(--font-mono); color: var(--text-secondary);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.fileTokens {
+  color: var(--text-muted); font-size: 10px; white-space: nowrap; margin-left: 8px;
+}

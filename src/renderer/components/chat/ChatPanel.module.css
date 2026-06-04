@@ -1,0 +1,126 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-primary);
+}
+
+/* Bottom bar */
+.bottomBar {
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.modelButton {
+  display: flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: var(--radius-md);
+  border: 1px solid var(--border-color); background: transparent;
+  color: var(--text-primary); cursor: pointer; font-size: 12px;
+  font-weight: 500;
+  transition: background 0.15s, border-color 0.15s;
+}
+.modelButton:hover { background: var(--bg-tertiary); border-color: var(--text-muted); }
+.modelButton:disabled { cursor: not-allowed; opacity: 0.4; }
+.modelButtonArrow { font-size: 9px; color: var(--text-muted); }
+
+.modeButton {
+  padding: 4px 10px; border-radius: var(--radius-md);
+  border: 1px solid var(--border-color); background: transparent;
+  color: var(--text-secondary); cursor: pointer; font-size: 12px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.modeButton:hover { background: var(--bg-tertiary); border-color: var(--text-muted); }
+.modeButton:disabled { cursor: not-allowed; opacity: 0.4; }
+
+.spacer { flex: 1; }
+
+.runtime {
+  font-size: 11px; color: var(--text-muted);
+  font-family: var(--font-mono); user-select: none;
+}
+
+.acceptAllBtn {
+  padding: 4px 12px; border-radius: var(--radius-md);
+  border: 1px solid var(--accent-green);
+  background: rgba(63, 185, 80, 0.1);
+  color: var(--accent-green); cursor: pointer;
+  font-size: 11px; font-weight: 500; white-space: nowrap;
+  transition: background 0.15s;
+}
+.acceptAllBtn:hover { background: rgba(63, 185, 80, 0.2); }
+
+.sendButton {
+  padding: 6px 22px; border-radius: var(--radius-md);
+  border: none; background: var(--accent-color);
+  color: #fff; cursor: pointer; font-size: 13px; font-weight: 600;
+  white-space: nowrap; transition: opacity 0.15s;
+}
+.sendButton:hover { opacity: 0.85; }
+.sendButton:disabled {
+  background: var(--bg-tertiary); color: var(--text-muted); cursor: not-allowed; opacity: 1;
+}
+
+.stopButton {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--border-color);
+  background: transparent; cursor: pointer;
+  flex-shrink: 0; transition: border-color 0.15s;
+  position: relative;
+}
+.stopButton::after {
+  content: ''; position: absolute; inset: 4px;
+  background: var(--text-secondary); border-radius: 2px;
+}
+.stopButton:hover { border-color: var(--accent-red); }
+.stopButton:hover::after { background: var(--accent-red); }
+
+/* Model menu */
+.modelMenuOverlay { position: fixed; inset: 0; z-index: 99; }
+
+.modelMenu {
+  position: absolute; bottom: 100%; left: 12px; margin-bottom: 6px;
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg); padding: 6px; min-width: 240px;
+  z-index: 100; box-shadow: var(--shadow-lg); max-height: 320px; overflow-y: auto;
+}
+
+.modelMenuItem {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; border-radius: var(--radius-md); cursor: pointer;
+  transition: background 0.1s;
+}
+.modelMenuItem:hover { background: var(--bg-tertiary); }
+.modelMenuItemActive { background: rgba(88, 166, 255, 0.1); }
+.modelMenuItemDisabled { cursor: not-allowed; opacity: 0.4; }
+
+.modelMenuName { font-size: 13px; color: var(--text-primary); }
+.modelMenuNameActive { font-weight: 600; color: var(--accent-color); }
+.modelMenuSub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.modelMenuCheck { font-size: 12px; color: var(--accent-color); }
+
+/* Toggle switch */
+.toggle {
+  display: flex; align-items: center; gap: 5px;
+  cursor: pointer; font-size: 11px; font-weight: 500;
+  color: var(--text-muted); user-select: none;
+}
+
+.toggleTrack {
+  position: relative; width: 30px; height: 18px;
+  border-radius: 9px; background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  transition: background 0.2s, border-color 0.2s;
+}
+.toggleTrackOn { background: var(--accent-color); border-color: var(--accent-color); }
+
+.toggleKnob {
+  position: absolute; top: 2px; left: 2px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--text-primary); transition: transform 0.2s;
+}
+.toggleTrackOn .toggleKnob { transform: translateX(12px); background: #fff; }
