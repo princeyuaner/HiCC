@@ -32,6 +32,11 @@ const InputBox = forwardRef<InputBoxHandle, InputBoxProps>(({ onSend, disabled }
   const chatDrafts = useAppStore((s) => s.chatDrafts);
   const setChatDraft = useAppStore((s) => s.setChatDraft);
   const clearChatDraft = useAppStore((s) => s.clearChatDraft);
+  const enqueueMessage = useAppStore((s) => s.enqueueMessage);
+  const queuedMessages = useAppStore((s) => s.queuedMessages);
+  const removeQueuedMessage = useAppStore((s) => s.removeQueuedMessage);
+  const clearQueuedMessages = useAppStore((s) => s.clearQueuedMessages);
+  const [queueExpanded, setQueueExpanded] = useState(false);
 
   // Restore draft when switching conversations
   useEffect(() => {
@@ -117,7 +122,23 @@ const InputBox = forwardRef<InputBoxHandle, InputBoxProps>(({ onSend, disabled }
   // Re-focus after sending
   const handleSend = useCallback(() => {
     const trimmed = input.trim();
-    if (!trimmed || disabled) return;
+    if (!trimmed) return;
+
+    if (disabled) {
+      // Queue the message instead of dropping it
+      enqueueMessage(trimmed, attachments.length > 0 ? attachments : undefined);
+      setInput('');
+      setAttachments([]);
+      if (activeConversationId) clearChatDraft(activeConversationId);
+      historyIndexRef.current = -1;
+      historyCacheRef.current = '';
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+        textareaRef.current.focus();
+      }
+      return;
+    }
+
     onSend(trimmed, attachments.length > 0 ? attachments : undefined);
     setInput('');
     setAttachments([]);
@@ -128,7 +149,7 @@ const InputBox = forwardRef<InputBoxHandle, InputBoxProps>(({ onSend, disabled }
       textareaRef.current.style.height = 'auto';
       textareaRef.current.focus();
     }
-  }, [input, disabled, onSend, attachments, activeConversationId, clearChatDraft]);
+  }, [input, disabled, onSend, attachments, activeConversationId, clearChatDraft, enqueueMessage]);
 
   useImperativeHandle(ref, () => ({ send: handleSend }), [handleSend]);
 
@@ -331,13 +352,14 @@ const InputBox = forwardRef<InputBoxHandle, InputBoxProps>(({ onSend, disabled }
           try {
             const filePath = await window.hicc.writeBinaryFile(dataUrl);
             const fileName = filePath.split(/[\\/]/).pop() || 'image.png';
-            setAttachments((prev) => [...prev, { filePath, fileName, type: 'file' }]);
+            setAttachments((prev) => [...prev, { filePath, fileName, type: 'file' as const, thumbnailDataUrl: dataUrl }]);
           } catch {
             // fallback: use data URL directly
             setAttachments((prev) => [...prev, {
               filePath: dataUrl,
               fileName: `image-${Date.now()}.png`,
-              type: 'file',
+              type: 'file' as const,
+              thumbnailDataUrl: dataUrl,
             }]);
           }
         };
@@ -376,11 +398,22 @@ const InputBox = forwardRef<InputBoxHandle, InputBoxProps>(({ onSend, disabled }
     if (files) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        newAttachments.push({
-          filePath: file.path,
-          fileName: file.name,
-          type: 'file',
-        });
+        // For image files, read as data URL for thumbnail preview
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const dataUrl = reader.result as string;
+            const filePath = (file as File & { path?: string }).path || dataUrl;
+            setAttachments((prev) => [...prev, { filePath, fileName: file.name, type: 'file' as const, thumbnailDataUrl: dataUrl }]);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          newAttachments.push({
+            filePath: (file as File & { path?: string }).path || '',
+            fileName: file.name,
+            type: 'file',
+          });
+        }
       }
     }
     setAttachments((prev) => [...prev, ...newAttachments]);
@@ -416,9 +449,45 @@ const InputBox = forwardRef<InputBoxHandle, InputBoxProps>(({ onSend, disabled }
               fileName={att.fileName}
               content={att.content}
               language={att.language}
+              thumbnailDataUrl={att.thumbnailDataUrl}
               onRemove={() => handleRemoveAttachment(att.filePath)}
             />
           ))}
+        </div>
+      )}
+      {disabled && queuedMessages.length > 0 && (
+        <div className={styles.queuePanel}>
+          <div
+            className={styles.queueHeader}
+            onClick={() => setQueueExpanded(!queueExpanded)}
+          >
+            <span className={styles.queueArrow}>{queueExpanded ? '▼' : '▶'}</span>
+            <span>{queuedMessages.length} message(s) queued</span>
+            <button
+              className={styles.queueClearAll}
+              onClick={(e) => { e.stopPropagation(); clearQueuedMessages(); setQueueExpanded(false); }}
+              title="Clear all queued messages"
+            >
+              Clear all
+            </button>
+          </div>
+          {queueExpanded && (
+            <div className={styles.queueList}>
+              {queuedMessages.map((msg, i) => (
+                <div key={i} className={styles.queueItem}>
+                  <span className={styles.queueIndex}>{i + 1}</span>
+                  <span className={styles.queuePreview}>{msg.text.slice(0, 80)}{msg.text.length > 80 ? '…' : ''}</span>
+                  <button
+                    className={styles.queueRemove}
+                    onClick={() => { removeQueuedMessage(i); if (queuedMessages.length <= 1) setQueueExpanded(false); }}
+                    title="Remove from queue"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
       <div style={{ position: 'relative' }}>
@@ -429,7 +498,11 @@ const InputBox = forwardRef<InputBoxHandle, InputBoxProps>(({ onSend, disabled }
           onChange={handleInput}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
-          placeholder={disabled ? "AI is responding... (type to draft, can't send yet)" : "Describe what you want to build... (Enter to send, Shift+Enter for new line, @ to reference files)"}
+          placeholder={disabled
+            ? queuedMessages.length > 0
+              ? `AI is responding... (${queuedMessages.length} message(s) queued, Enter to queue more)`
+              : "AI is responding... (Enter to queue message, type to draft)"
+            : "Describe what you want to build... (Enter to send, Shift+Enter for new line, @ to reference files)"}
           rows={3}
         />
         {mention.active && (

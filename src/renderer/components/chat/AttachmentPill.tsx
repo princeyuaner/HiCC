@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './AttachmentPill.module.css';
 
 interface AttachmentPillProps {
@@ -6,6 +6,7 @@ interface AttachmentPillProps {
   fileName: string;
   content?: string;
   language?: string;
+  thumbnailDataUrl?: string;
   onRemove: () => void;
 }
 
@@ -20,15 +21,46 @@ function getLangIcon(lang?: string): string {
   return LANG_ICONS[lang] || '📄';
 }
 
-const AttachmentPill: React.FC<AttachmentPillProps> = ({ filePath, fileName, content, language, onRemove }) => {
+const IMAGE_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp']);
+
+function isImageFile(fileName: string): boolean {
+  const ext = fileName.split('.').pop()?.toLowerCase();
+  return ext ? IMAGE_EXTENSIONS.has(ext) : false;
+}
+
+function getImageSrc(filePath: string): string {
+  if (filePath.startsWith('data:')) return filePath;
+  // Convert Windows paths to file:// URL for Electron renderer
+  if (/^[A-Za-z]:[/\\]/.test(filePath)) {
+    return 'file:///' + filePath.replace(/\\/g, '/');
+  }
+  if (filePath.startsWith('/')) return 'file://' + filePath;
+  return filePath;
+}
+
+const AttachmentPill: React.FC<AttachmentPillProps> = ({ filePath, fileName, content, language, thumbnailDataUrl, onRemove }) => {
   const isSelection = !!content;
+  const showThumb = isImageFile(fileName);
+  const [thumbFailed, setThumbFailed] = useState(false);
   const preview = content
     ? content.split('\n').slice(0, 3).join('\n') + (content.split('\n').length > 3 ? '\n...' : '')
     : '';
 
+  // Prefer thumbnailDataUrl (no file:// restrictions), fall back to filePath
+  const imgSrc = thumbnailDataUrl || getImageSrc(filePath);
+
   return (
     <div className={`${styles.pill} ${isSelection ? styles.pillSelection : ''}`} title={isSelection ? preview : filePath}>
-      <span className={styles.icon}>{getLangIcon(language)}</span>
+      {showThumb && !thumbFailed ? (
+        <img
+          className={styles.thumbnail}
+          src={imgSrc}
+          alt={fileName}
+          onError={() => setThumbFailed(true)}
+        />
+      ) : (
+        <span className={styles.icon}>{getLangIcon(language)}</span>
+      )}
       <span className={styles.name}>{fileName}</span>
       {isSelection && <span className={styles.preview}>{preview.slice(0, 80)}</span>}
       <button className={styles.remove} onClick={onRemove} title="Remove attachment">×</button>

@@ -87,6 +87,12 @@ const ChatPanel: React.FC = () => {
   const setAvailableCommands = useAppStore((s) => s.setAvailableCommands);
   const acceptAllDiffs = useAppStore((s) => s.acceptAllDiffs);
   const acceptedDiffIds = useAppStore((s) => s.acceptedDiffIds);
+  const queuedMessages = useAppStore((s) => s.queuedMessages);
+  const clearQueuedMessages = useAppStore((s) => s.clearQueuedMessages);
+  const dequeueAndSendNext = useAppStore((s) => s.dequeueAndSendNext);
+
+  // Guard against double-processing queued messages in strict mode
+  const queueDispatchRef = useRef(false);
 
   // Count pending (unaccepted) diffs
   const pendingDiffs = useMemo(() => messages.reduce((count, msg) => {
@@ -165,7 +171,7 @@ const ChatPanel: React.FC = () => {
     });
     window.hicc.onAiToolResult((data) => {
       console.log('[RENDERER IPC] tool-result:', { toolUseId: data.toolUseId, hasStdout: !!data.stdout, hasStderr: !!data.stderr });
-      onToolResult(data.toolUseId, data.stdout, data.stderr);
+      onToolResult(data.toolUseId, data.stdout, data.stderr, data.isImage);
     });
     window.hicc.onAiToolDescription((data: { toolUseId: string; description: string }) => {
       console.log('[RENDERER IPC] tool-description:', { toolUseId: data.toolUseId, desc: (data.description || '').slice(0, 100) });
@@ -193,7 +199,7 @@ const ChatPanel: React.FC = () => {
     }
   }, [activeConversationId, createConversation]);
 
-  // Auto-save on turn complete
+  // Auto-save on turn complete + auto-dispatch queued messages
   useEffect(() => {
     if (!isStreaming && messages.length > 0 && activeConversationId) {
       const activeConv = conversations.find((c) => c.id === activeConversationId);
@@ -215,6 +221,23 @@ const ChatPanel: React.FC = () => {
         activeTab: s.activeTab,
         activeSidebar: s.activeSidebar,
       }).catch(() => {});
+
+      // Auto-dispatch next queued message (guard against strict-mode double-fire)
+      if (!queueDispatchRef.current) {
+        const queue = useAppStore.getState().queuedMessages;
+        if (queue.length > 0) {
+          queueDispatchRef.current = true;
+          const next = useAppStore.getState().dequeueAndSendNext();
+          if (next) {
+            setTimeout(() => {
+              handleSend(next.text, next.attachments);
+              queueDispatchRef.current = false;
+            }, 200);
+          } else {
+            queueDispatchRef.current = false;
+          }
+        }
+      }
     }
   }, [isStreaming]);
 
@@ -268,10 +291,11 @@ const ChatPanel: React.FC = () => {
   }, [addMessage, setStreaming, setMessageError]);
 
   const handleStop = useCallback(async () => {
+    clearQueuedMessages();
     await cancelStream();
     // Restart session so next message works
     window.hicc.startSession(activeModelKey, permissionMode, effortLevel).catch(console.error);
-  }, [cancelStream, activeModelKey, permissionMode, effortLevel]);
+  }, [cancelStream, activeModelKey, permissionMode, effortLevel, clearQueuedMessages]);
 
   const handleModelSwitch = useCallback(async (key: string) => {
     if (key === activeModelKey) return;
@@ -676,7 +700,24 @@ const ChatPanel: React.FC = () => {
           </span>
         )}
         {isStreaming ? (
-          <button className={styles.stopButton} onClick={handleStop} title="Stop generating" />
+          <>
+            {queuedMessages.length > 0 && (
+              <span style={{
+                fontSize: 11,
+                color: 'var(--accent-color)',
+                fontWeight: 600,
+                fontFamily: 'var(--font-mono)',
+                marginRight: 2,
+              }}>
+                +{queuedMessages.length}
+              </span>
+            )}
+            <button
+              className={styles.stopButton}
+              onClick={handleStop}
+              title={`Stop generating${queuedMessages.length > 0 ? ' — will also clear queued messages' : ''}`}
+            />
+          </>
         ) : (
           <button
             className={styles.sendButton}

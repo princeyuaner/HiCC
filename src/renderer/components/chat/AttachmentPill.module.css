@@ -40,3 +40,11 @@
   font-family: var(--font-mono); font-size: 11px;
   margin-left: 6px; max-width: 160px;
 }
+
+.thumbnail {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 3px;
+  flex-shrink: 0;
+}

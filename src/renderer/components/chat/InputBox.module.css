@@ -72,3 +72,86 @@
   font-size: 12px;
 }
 .slashDesc { color: var(--text-secondary); font-size: 12px; }
+
+.queuePanel {
+  margin-bottom: 8px;
+  background: rgba(88, 166, 255, 0.06);
+  border: 1px solid rgba(88, 166, 255, 0.2);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.queueHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: var(--accent-color);
+  user-select: none;
+  transition: background 0.1s;
+}
+.queueHeader:hover { background: rgba(88, 166, 255, 0.08); }
+
+.queueArrow { font-size: 9px; flex-shrink: 0; }
+
+.queueClearAll {
+  margin-left: auto;
+  padding: 2px 8px;
+  border: 1px solid rgba(88, 166, 255, 0.3);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--accent-color);
+  cursor: pointer;
+  font-size: 11px;
+  transition: background 0.15s;
+}
+.queueClearAll:hover { background: rgba(88, 166, 255, 0.12); }
+
+.queueList {
+  border-top: 1px solid rgba(88, 166, 255, 0.12);
+  max-height: 160px;
+  overflow: auto;
+}
+
+.queueItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  transition: background 0.1s;
+}
+.queueItem:hover { background: rgba(88, 166, 255, 0.06); }
+.queueItem + .queueItem { border-top: 1px solid rgba(88, 166, 255, 0.08); }
+
+.queueIndex {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-family: var(--font-mono);
+  min-width: 16px;
+  flex-shrink: 0;
+}
+
+.queuePreview {
+  flex: 1;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.queueRemove {
+  padding: 0 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  flex-shrink: 0;
+  border-radius: 3px;
+  transition: all 0.1s;
+}
+.queueRemove:hover { color: var(--accent-red); background: rgba(244, 67, 54, 0.08); }

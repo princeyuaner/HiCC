@@ -49,6 +49,7 @@ export interface Attachment {
   type: 'file' | 'directory' | 'selection';
   content?: string;
   language?: string;
+  thumbnailDataUrl?: string;
 }
 
 export type ContentBlock =
@@ -66,6 +67,7 @@ export interface ToolCall {
   stdout?: string;
   stderr?: string;
   elapsedSeconds?: number;
+  isImage?: boolean;
   description?: string;
   originalContent?: string;
   newFilePath?: string;

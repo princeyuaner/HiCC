@@ -3,6 +3,7 @@ import type { ChatMessage, ContentBlock, ToolCall } from '../../types';
 import { useAppStore } from '../../store/app-store';
 import MarkdownRenderer from './MarkdownRenderer';
 import DiffPreview from './DiffPreview';
+import ToolOutputRenderer from './ToolOutputRenderer';
 import styles from './MessageBubble.module.css';
 
 function formatTime(timestamp: number): string {
@@ -244,12 +245,12 @@ const ToolUseBlock: React.FC<{ toolCall: ToolCall }> = ({ toolCall }) => {
           {toolCall.summary && (
             <div className={styles.toolSummary}>{toolCall.summary}</div>
           )}
-          {toolCall.stdout && (
-            <div className={styles.toolStdout}>{toolCall.stdout}</div>
-          )}
-          {toolCall.stderr && (
-            <div className={styles.toolStderr}>{toolCall.stderr}</div>
-          )}
+          <ToolOutputRenderer
+            stdout={toolCall.stdout}
+            stderr={toolCall.stderr}
+            isImage={toolCall.isImage}
+            toolName={toolCall.name}
+          />
         </div>
       )}
       {!bodyExpanded && hasOutput && (

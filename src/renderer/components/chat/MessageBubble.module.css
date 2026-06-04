@@ -227,3 +227,63 @@
 .bubble, .assistantBlocks {
   animation: fadeInUp 0.2s ease;
 }
+
+/* Tool output renderer — Image */
+.toolOutputImage {
+  margin-top: 6px;
+}
+.toolOutputImage img {
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Tool output renderer — Diff */
+.toolOutputDiff {
+  margin-top: 6px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  max-height: 250px;
+  overflow: auto;
+}
+.toolOutputDiffLine {
+  padding: 1px 10px;
+  white-space: pre;
+  line-height: 1.5;
+}
+.toolOutputDiffAdd {
+  background: rgba(76, 175, 80, 0.12);
+  color: var(--accent-green);
+}
+.toolOutputDiffRemove {
+  background: rgba(244, 67, 54, 0.12);
+  color: var(--accent-red);
+}
+.toolOutputDiffHeader {
+  background: var(--bg-tertiary);
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+/* Tool output renderer — Code */
+.toolOutputCode {
+  margin-top: 6px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  max-height: 300px;
+  overflow: auto;
+  border: 1px solid var(--border-subtle);
+}
+.toolOutputPlain {
+  margin: 0;
+  padding: 8px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  background: var(--bg-primary);
+}

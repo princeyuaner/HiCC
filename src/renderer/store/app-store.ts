@@ -3,7 +3,7 @@ import type { FileNode, ChatMessage, EditorTab, ApiProfile, ContentBlock, ToolCa
 
 // Buffer for tool results that arrive before the tool_use block is created.
 // This handles the race condition where IPC messages arrive out of order.
-const pendingToolResults = new Map<string, { stdout?: string; stderr?: string }>();
+const pendingToolResults = new Map<string, { stdout?: string; stderr?: string; isImage?: boolean }>();
 
 function estimateCost(modelKey: string, inputTokens: number, outputTokens: number): number {
   const prices: Record<string, { input: number; output: number }> = {
@@ -136,6 +136,7 @@ interface AppState {
   permissionMode: string;
   effortLevel: string;
   use1MContext: boolean;
+  queuedMessages: Array<{ text: string; attachments?: Attachment[] }>;
 
   // Conversations
   conversations: { id: string; title: string; modelKey: string; permissionMode: string; createdAt: number; updatedAt: number }[];
@@ -156,7 +157,7 @@ interface AppState {
   onToolUse: (id: string, name: string, input: Record<string, unknown>, description?: string) => void;
   onToolProgress: (toolUseId: string, toolName: string, elapsedSeconds: number) => void;
   onToolUseSummary: (summary: string, toolUseIds: string[]) => void;
-  onToolResult: (toolUseId: string, stdout?: string, stderr?: string) => void;
+  onToolResult: (toolUseId: string, stdout?: string, stderr?: string, isImage?: boolean) => void;
   onTurnComplete: (usage?: { input_tokens: number; output_tokens: number }, totalCostUsd?: number) => void;
   onAiStatus: (status: string) => void;
   setSessionError: (error: string | null) => void;
@@ -178,6 +179,10 @@ interface AppState {
   setPermissionMode: (mode: string) => void;
   setEffortLevel: (level: string) => void;
   setUse1MContext: (use: boolean) => void;
+  enqueueMessage: (text: string, attachments?: Attachment[]) => void;
+  dequeueAndSendNext: () => { text: string; attachments?: Attachment[] } | null;
+  removeQueuedMessage: (index: number) => void;
+  clearQueuedMessages: () => void;
 
   // Editor context menu
   pendingSelectionCommand: string | null;
@@ -482,6 +487,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   permissionMode: 'default',
   effortLevel: 'high',
   use1MContext: true,
+  queuedMessages: [],
   pendingSelectionCommand: null,
   pendingAttachment: null,
   setPendingSelectionCommand: (cmd) => set({ pendingSelectionCommand: cmd }),
@@ -519,6 +525,24 @@ export const useAppStore = create<AppState>((set, get) => ({
   setPermissionMode: (mode) => set({ permissionMode: mode }),
   setEffortLevel: (level) => set({ effortLevel: level }),
   setUse1MContext: (use) => set({ use1MContext: use }),
+
+  enqueueMessage: (text, attachments) => {
+    set((s) => ({ queuedMessages: [...s.queuedMessages, { text, attachments }] }));
+  },
+
+  dequeueAndSendNext: () => {
+    const queue = get().queuedMessages;
+    if (queue.length === 0) return null;
+    const [next, ...rest] = queue;
+    set({ queuedMessages: rest });
+    return next;
+  },
+
+  removeQueuedMessage: (index) => {
+    set((s) => ({ queuedMessages: s.queuedMessages.filter((_, i) => i !== index) }));
+  },
+
+  clearQueuedMessages: () => set({ queuedMessages: [] }),
 
   addMessage: (message) => set((s) => ({ messages: [...s.messages, message] })),
 
@@ -631,6 +655,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         status: bufferedResult ? 'executed' as const : 'pending' as const,
         stdout: bufferedResult?.stdout,
         stderr: bufferedResult?.stderr,
+        isImage: bufferedResult?.isImage,
         description,
       };
       const blocks: ContentBlock[] = [
@@ -690,7 +715,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     });
   },
 
-  onToolResult: (toolUseId, stdout?, stderr?) => {
+  onToolResult: (toolUseId, stdout?, stderr?, isImage?) => {
     set((s) => {
       const messages = [...s.messages];
       for (let i = messages.length - 1; i >= 0; i--) {
@@ -705,6 +730,7 @@ export const useAppStore = create<AppState>((set, get) => ({
                 status: 'executed' as const,
                 stdout,
                 stderr,
+                isImage,
               },
             };
           }
@@ -716,7 +742,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         }
       }
       // Tool_use block not found yet — buffer the result for when it arrives
-      pendingToolResults.set(toolUseId, { stdout, stderr });
+      pendingToolResults.set(toolUseId, { stdout, stderr, isImage });
       return { messages };
     });
   },
@@ -973,6 +999,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       messages: [],
       isStreaming: false,
       contextUsage: null,
+      queuedMessages: [],
     });
   },
 
@@ -1001,9 +1028,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         isStreaming: false,
         contextUsage: null,
         conversations: stored,
+        queuedMessages: [],
       });
     } catch {
-      set({ activeConversationId: id, messages: [], isStreaming: false, contextUsage: null });
+      set({ activeConversationId: id, messages: [], isStreaming: false, contextUsage: null, queuedMessages: [] });
     }
   },
 
