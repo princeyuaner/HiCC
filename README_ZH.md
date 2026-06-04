@@ -44,16 +44,6 @@
 - **Claude 设置同步** — 读写 `~/.claude/settings.json`
 - **深色/浅色主题**
 
-## 📸 界面截图
-
-| 主界面 | 对话输入 |
-|:---:|:---:|
-| ![主界面](screenshots/main-interface.png) | ![对话输入](screenshots/chat-typing.png) |
-
-| 完整布局 |
-|:---:|
-| ![完整布局](screenshots/full-layout.png) |
-
 ## 🚀 快速开始
 
 ### 环境要求

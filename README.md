@@ -46,16 +46,6 @@ An intelligent desktop IDE built with **Electron + React + TypeScript**, integra
 - **Claude settings sync** — reads/writes `~/.claude/settings.json`
 - **Dark/Light theme**
 
-## 📸 Screenshots
-
-| Main Interface | Chat Typing |
-|:---:|:---:|
-| ![Main Interface](screenshots/main-interface.png) | ![Chat Typing](screenshots/chat-typing.png) |
-
-| Full Layout |
-|:---:|
-| ![Full Layout](screenshots/full-layout.png) |
-
 ## 🚀 Quick Start
 
 ### Prerequisites
