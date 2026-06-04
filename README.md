@@ -1,5 +1,7 @@
 # HiCC - AI-Powered Coding IDE
 
+[中文版](README_ZH.md)
+
 An intelligent desktop IDE built with **Electron + React + TypeScript**, integrating **Claude AI** for code generation, review, and assistance.
 
 ## ✨ Features
