@@ -8,6 +8,7 @@ import { registerChatHandlers } from './chat';
 import { registerSftpHandlers } from './sftp';
 import { registerGitHandlers } from './git';
 import { registerSvnHandlers } from './svn';
+import { registerFormatHandlers } from './format';
 import { IPC_CHANNELS } from '../../shared/constants';
 import type { AnthropicClient } from '../services/anthropic-client';
 
@@ -25,6 +26,7 @@ export function registerAllIpcHandlers(anthropicClient?: AnthropicClient): void 
   registerSftpHandlers();
   registerGitHandlers();
   registerSvnHandlers();
+  registerFormatHandlers();
 
   // File open dialog
   ipcMain.handle(IPC_CHANNELS.DIALOG_OPEN_FILES, async (event) => {

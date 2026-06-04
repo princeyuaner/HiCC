@@ -490,12 +490,109 @@ const SettingsPanel: React.FC = () => {
           </div>
         )}
         {activeTab === 'general' && (
-          <div style={{ padding: 16, color: 'var(--text-secondary)', fontSize: 13 }}>
-            <p>General settings coming soon — theme, editor preferences, keyboard shortcuts, and more.</p>
-          </div>
+          <GeneralSettings />
         )}
       </div>
       </div>
+      </div>
+    </div>
+  );
+};
+
+// General settings sub-component
+const GeneralSettings: React.FC = () => {
+  const theme = useAppStore((s) => s.theme);
+  const toggleTheme = useAppStore((s) => s.toggleTheme);
+  const [formatOnSave, setFormatOnSave] = useState(false);
+
+  useEffect(() => {
+    window.hicc.getFormatSettings().then((s) => setFormatOnSave(s.formatOnSave)).catch(() => {});
+  }, []);
+
+  const handleFormatToggle = (val: boolean) => {
+    setFormatOnSave(val);
+    window.hicc.setFormatSettings({ formatOnSave: val }).catch(() => {});
+  };
+
+  const settingRow: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '10px 0',
+    borderBottom: '1px solid var(--border-color)',
+  };
+  const settingLabel: React.CSSProperties = {
+    fontSize: 13,
+    color: 'var(--text-primary)',
+  };
+  const settingHint: React.CSSProperties = {
+    fontSize: 11,
+    color: 'var(--text-muted)',
+    marginTop: 2,
+  };
+
+  const toggleStyle: React.CSSProperties = {
+    width: 40,
+    height: 22,
+    borderRadius: 11,
+    border: 'none',
+    cursor: 'pointer',
+    position: 'relative',
+    transition: 'background 0.2s',
+  };
+
+  return (
+    <div style={{ padding: '16px 20px' }}>
+      <div style={settingRow}>
+        <div>
+          <div style={settingLabel}>Theme</div>
+          <div style={settingHint}>Toggle between dark and light appearance</div>
+        </div>
+        <button
+          style={{ ...toggleStyle, background: theme === 'dark' ? 'var(--accent-color)' : 'var(--text-muted)' }}
+          onClick={toggleTheme}
+        >
+          <span style={{
+            position: 'absolute',
+            top: 2,
+            left: theme === 'dark' ? 20 : 2,
+            width: 18,
+            height: 18,
+            borderRadius: '50%',
+            background: '#fff',
+            transition: 'left 0.2s',
+          }} />
+        </button>
+      </div>
+
+      <div style={settingRow}>
+        <div>
+          <div style={settingLabel}>Format on Save</div>
+          <div style={settingHint}>Automatically format code with Prettier when saving (Ctrl+S)</div>
+        </div>
+        <button
+          style={{ ...toggleStyle, background: formatOnSave ? 'var(--accent-color)' : 'var(--text-muted)' }}
+          onClick={() => handleFormatToggle(!formatOnSave)}
+        >
+          <span style={{
+            position: 'absolute',
+            top: 2,
+            left: formatOnSave ? 20 : 2,
+            width: 18,
+            height: 18,
+            borderRadius: '50%',
+            background: '#fff',
+            transition: 'left 0.2s',
+          }} />
+        </button>
+      </div>
+
+      <div style={{ ...settingRow, borderBottom: 'none' }}>
+        <div>
+          <div style={settingLabel}>Keyboard Shortcuts</div>
+          <div style={settingHint}>Shift+Alt+F — Format current document</div>
+          <div style={settingHint}>Ctrl+S — Save file (with optional format on save)</div>
+        </div>
       </div>
     </div>
   );

@@ -25,6 +25,7 @@
     "electron-store": "^8.2.0",
     "node-pty": "^1.1.0",
     "node-ssh": "^13.2.1",
+    "prettier": "^3.8.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-markdown": "^10.1.0",

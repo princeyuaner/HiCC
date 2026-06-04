@@ -126,13 +126,27 @@ const CodeEditor: React.FC = () => {
     }
   }, [activeTab]);
 
-  const handleSave = useCallback(() => {
-    if (activeTab && fileContent !== null) {
-      window.hicc.writeFile(activeTab, fileContent).then(() => {
-        useAppStore.getState().markTabDirty(activeTab, false);
-        useAppStore.getState().clearDirtyContent(activeTab);
-      });
+  const handleSave = useCallback(async () => {
+    if (!activeTab || fileContent === null) return;
+    let content = fileContent;
+    const store = useAppStore.getState();
+    const settings = await window.hicc.getFormatSettings().catch(() => ({ formatOnSave: false }));
+    if (settings.formatOnSave) {
+      try {
+        const result = await window.hicc.formatDocument(activeTab, content);
+        if ('formatted' in result && result.formatted !== content) {
+          content = result.formatted;
+          setFileContent(content);
+          store.setStatusBarMessage('Formatted on save');
+        }
+      } catch {
+        // Silently skip format on save errors
+      }
     }
+    window.hicc.writeFile(activeTab, content).then(() => {
+      store.markTabDirty(activeTab, false);
+      store.clearDirtyContent(activeTab);
+    });
   }, [activeTab, fileContent]);
 
   // Keyboard shortcut: Ctrl+S
@@ -146,6 +160,37 @@ const CodeEditor: React.FC = () => {
     });
     return () => disposable.dispose();
   }, [editorInstance, handleSave]);
+
+  // Format document action: Shift+Alt+F
+  useEffect(() => {
+    if (!editorInstance || !activeTab) return;
+    const disposable = editorInstance.addAction({
+      id: 'format-document',
+      label: 'Format Document',
+      keybindings: [1024 | 512 | 33], // Shift+Alt+F (1024=Shift, 512=Alt, 33=F)
+      run: async (ed) => {
+        const currentContent = ed.getValue();
+        try {
+          const result = await window.hicc.formatDocument(activeTab, currentContent);
+          if ('formatted' in result && result.formatted !== currentContent) {
+            const pos = ed.getPosition();
+            ed.executeEdits('format', [{
+              range: ed.getModel()!.getFullModelRange(),
+              text: result.formatted,
+            }]);
+            if (pos) ed.setPosition(pos);
+            setFileContent(result.formatted);
+            useAppStore.getState().setStatusBarMessage('Document formatted');
+          } else if ('error' in result) {
+            useAppStore.getState().setStatusBarMessage(`Format error: ${result.error}`);
+          }
+        } catch (err) {
+          useAppStore.getState().setStatusBarMessage(`Format failed: ${String(err)}`);
+        }
+      },
+    });
+    return () => disposable.dispose();
+  }, [editorInstance, activeTab]);
 
   // Custom context menu via DOM event (avoids Monaco/Electron menu conflicts)
   useEffect(() => {

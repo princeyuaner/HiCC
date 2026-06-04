@@ -7,6 +7,7 @@ interface ConfigSchema {
   recentProjects: string[];
   theme: 'light' | 'dark';
   mcpServers: Record<string, McpServerConfig>;
+  formatOnSave: boolean;
   sessionState: {
     activeConversationId: string | null;
     openTabs: Array<{ path: string; name: string; isDirty: boolean }>;
@@ -22,6 +23,7 @@ const store = new Store<ConfigSchema>({
     recentProjects: [],
     theme: 'dark',
     mcpServers: {},
+    formatOnSave: false,
     sessionState: null,
   },
   encryptionKey: 'hicc-config-v1',
@@ -195,4 +197,12 @@ export function getTheme(): 'light' | 'dark' {
 
 export function setTheme(theme: 'light' | 'dark'): void {
   store.set('theme', theme);
+}
+
+export function getFormatOnSave(): boolean {
+  return store.get('formatOnSave');
+}
+
+export function setFormatOnSave(formatOnSave: boolean): void {
+  store.set('formatOnSave', formatOnSave);
 }

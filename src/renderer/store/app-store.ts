@@ -239,6 +239,10 @@ interface AppState {
   cursorLine: number;
   cursorColumn: number;
   setCursorPosition: (line: number, column: number) => void;
+
+  // Status bar message
+  statusBarMessage: string | null;
+  setStatusBarMessage: (msg: string | null) => void;
 }
 
 export const selectActiveProfile = (state: AppState): ApiProfile | undefined =>
@@ -1114,4 +1118,15 @@ export const useAppStore = create<AppState>((set, get) => ({
   cursorLine: 1,
   cursorColumn: 1,
   setCursorPosition: (line, column) => set({ cursorLine: line, cursorColumn: column }),
+
+  statusBarMessage: null,
+  setStatusBarMessage: (msg) => {
+    set({ statusBarMessage: msg });
+    if (msg) {
+      setTimeout(() => {
+        const current = useAppStore.getState().statusBarMessage;
+        if (current === msg) set({ statusBarMessage: null });
+      }, 5000);
+    }
+  },
 }));

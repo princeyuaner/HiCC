@@ -62,6 +62,10 @@ export const IPC_CHANNELS = {
   CONFIG_LOAD_CLAUDE_SETTINGS: 'config:load-claude-settings',
   CONFIG_GET_MCP_SERVERS: 'config:get-mcp-servers',
   CONFIG_SAVE_MCP_SERVERS: 'config:save-mcp-servers',
+  // Format
+  CONFIG_FORMAT_DOCUMENT: 'config:format-document',
+  CONFIG_GET_FORMAT_SETTINGS: 'config:get-format-settings',
+  CONFIG_SET_FORMAT_SETTINGS: 'config:set-format-settings',
   // Session
   SESSION_SAVE: 'session:save',
   SESSION_RESTORE: 'session:restore',

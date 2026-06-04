@@ -11,6 +11,7 @@ const StatusBar: React.FC = () => {
   const indexProgress = useAppStore((s) => s.indexProgress);
   const indexCount = useAppStore((s) => s.indexCount);
   const indexCurrentFile = useAppStore((s) => s.indexCurrentFile);
+  const statusBarMessage = useAppStore((s) => s.statusBarMessage);
 
   useEffect(() => {
     if (!projectPath) { setGitBranch(''); return; }
@@ -36,6 +37,9 @@ const StatusBar: React.FC = () => {
       <span>Ln {cursorLine}, Col {cursorColumn}</span>
       {ext && <span>{ext}</span>}
       <span style={{ flex: 1 }} />
+      {statusBarMessage && (
+        <span style={{ color: 'var(--text-warning)', fontSize: 11 }}>{statusBarMessage}</span>
+      )}
       {indexProgress && (
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: 'var(--accent-color)' }} title={indexCurrentFile || undefined}>
           <span style={{ width: 80, height: 3, background: 'var(--bg-tertiary)', borderRadius: 2, overflow: 'hidden', verticalAlign: 'middle' }}>

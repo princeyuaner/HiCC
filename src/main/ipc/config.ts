@@ -12,6 +12,8 @@ import {
   setSessionState,
   getMcpServers,
   saveMcpServers,
+  getFormatOnSave,
+  setFormatOnSave,
 } from '../store/config-store';
 import { readClaudeSettings, writeClaudeModels, writeClaudeAuth } from '../services/claude-settings';
 import type { ApiProfile } from '../../shared/types';
@@ -84,6 +86,14 @@ export function registerConfigHandlers(): void {
 
   ipcMain.handle(IPC_CHANNELS.CONFIG_SAVE_MCP_SERVERS, (_event, servers: Record<string, unknown>) => {
     saveMcpServers(servers as Record<string, import('../../shared/types').McpServerConfig>);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.CONFIG_GET_FORMAT_SETTINGS, () => {
+    return { formatOnSave: getFormatOnSave() };
+  });
+
+  ipcMain.handle(IPC_CHANNELS.CONFIG_SET_FORMAT_SETTINGS, (_event, settings: { formatOnSave: boolean }) => {
+    setFormatOnSave(settings.formatOnSave);
   });
 }
 

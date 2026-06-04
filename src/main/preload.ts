@@ -195,6 +195,13 @@ const api = {
   // MCP servers
   getMcpServers: () => ipcRenderer.invoke('config:get-mcp-servers'),
   saveMcpServers: (servers: unknown) => ipcRenderer.invoke('config:save-mcp-servers', servers),
+
+  // Format
+  formatDocument: (filePath: string, content: string) =>
+    ipcRenderer.invoke('config:format-document', filePath, content),
+  getFormatSettings: () => ipcRenderer.invoke('config:get-format-settings'),
+  setFormatSettings: (settings: { formatOnSave: boolean }) =>
+    ipcRenderer.invoke('config:set-format-settings', settings),
 };
 
 contextBridge.exposeInMainWorld('hicc', api);

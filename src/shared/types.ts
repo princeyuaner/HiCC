@@ -360,6 +360,11 @@ export interface HiccApi {
   // Code review
   reviewCode: (scope: ReviewScope, commitHash?: string) => Promise<ReviewResult>;
 
+  // Format
+  formatDocument: (filePath: string, content: string) => Promise<FormatResponse>;
+  getFormatSettings: () => Promise<FormatSettings>;
+  setFormatSettings: (settings: FormatSettings) => Promise<void>;
+
   // MCP servers
   getMcpServers: () => Promise<Record<string, McpServerConfig>>;
   saveMcpServers: (servers: Record<string, unknown>) => Promise<void>;
@@ -397,6 +402,22 @@ export interface SessionState {
   openTabs: Array<{ path: string; name: string; isDirty: boolean }>;
   activeTab: string | null;
   activeSidebar: 'files' | 'search' | 'git' | 'review' | 'svn' | 'settings' | null;
+}
+
+// --- Format ---
+
+export interface FormatResult {
+  formatted: string;
+}
+
+export interface FormatError {
+  error: string;
+}
+
+export type FormatResponse = FormatResult | FormatError;
+
+export interface FormatSettings {
+  formatOnSave: boolean;
 }
 
 declare global {
