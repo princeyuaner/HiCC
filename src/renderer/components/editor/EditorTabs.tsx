@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAppStore } from '../../store/app-store';
 import CodeEditor from './CodeEditor';
+import Breadcrumb from './Breadcrumb';
 
 const EditorTabs: React.FC = () => {
   const openTabs = useAppStore((s) => s.openTabs);
@@ -52,6 +53,7 @@ const EditorTabs: React.FC = () => {
           ))}
         </div>
       )}
+      <Breadcrumb />
       <CodeEditor />
     </div>
   );
