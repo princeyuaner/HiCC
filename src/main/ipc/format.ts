@@ -1,21 +1,56 @@
 import { ipcMain } from 'electron';
 import * as prettier from 'prettier';
 import * as path from 'path';
-import * as fs from 'fs';
+import { spawn } from 'child_process';
 import { IPC_CHANNELS } from '../../shared/constants';
+
+function runBlack(filePath: string, content: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const proc = spawn('black', ['--stdin-filename', filePath, '--quiet', '-'], {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      timeout: 30000,
+    });
+
+    let stdout = '';
+    let stderr = '';
+
+    proc.stdout?.on('data', (chunk: Buffer) => { stdout += chunk.toString(); });
+    proc.stderr?.on('data', (chunk: Buffer) => { stderr += chunk.toString(); });
+
+    proc.on('close', (code) => {
+      if (code === 0) {
+        resolve(stdout);
+      } else {
+        reject(new Error(stderr || `Black exited with code ${code}`));
+      }
+    });
+
+    proc.on('error', (err) => {
+      reject(new Error(`Black formatter not found. Install with: pip install black (${err.message})`));
+    });
+
+    proc.stdin?.write(content);
+    proc.stdin?.end();
+  });
+}
 
 export function registerFormatHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.CONFIG_FORMAT_DOCUMENT, async (_event, filePath: string, content: string) => {
     try {
-      // Resolve prettier config from the file's directory
-      const dir = path.dirname(filePath);
+      const ext = path.extname(filePath).toLowerCase();
+
+      // Python files use Black
+      if (ext === '.py' || ext === '.pyw') {
+        const formatted = await runBlack(filePath, content);
+        return { formatted };
+      }
+
+      // All other files use Prettier
       const config = await prettier.resolveConfig(filePath, {
         editorconfig: true,
       });
 
-      const ext = path.extname(filePath).toLowerCase();
       const parser = inferParser(filePath, ext);
-
       const formatted = await prettier.format(content, {
         ...config,
         filepath: filePath,
