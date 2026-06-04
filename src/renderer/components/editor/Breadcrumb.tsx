@@ -4,31 +4,39 @@ import { useAppStore } from '../../store/app-store';
 const Breadcrumb: React.FC = () => {
   const activeTab = useAppStore((s) => s.activeTab);
   const projectPath = useAppStore((s) => s.projectPath);
+  const projectName = useAppStore((s) => s.projectName);
   const setActiveSidebar = useAppStore((s) => s.setActiveSidebar);
 
   if (!activeTab || !projectPath) return null;
 
   // Calculate relative path from project root
-  const normProject = projectPath.replace(/\\/g, '/');
+  const normProject = projectPath.replace(/\\/g, '/').replace(/\/$/, '');
   const normFile = activeTab.replace(/\\/g, '/');
   let relativePath = normFile;
   if (normFile.toLowerCase().startsWith(normProject.toLowerCase())) {
     relativePath = normFile.slice(normProject.length).replace(/^\//, '');
   }
 
-  const segments = relativePath.split('/');
+  const segments = [projectName || normProject.split('/').pop() || '…', ...relativePath.split('/')];
 
   const handleSegmentClick = (index: number) => {
+    if (index === 0) {
+      // Root segment — expand project root in file tree
+      const store = useAppStore.getState();
+      const expanded = new Set(store.expandedDirs);
+      expanded.add(normProject.replace(/^\//, ''));
+      useAppStore.setState({ expandedDirs: expanded });
+      setActiveSidebar('files');
+      return;
+    }
     // Build the directory path up to this segment
-    const dirSegments = segments.slice(0, index + 1);
+    const dirSegments = segments.slice(1, index + 1);
     const dirPath = normProject + '/' + dirSegments.join('/');
-    // Focus the file explorer and expand to this directory
     const store = useAppStore.getState();
-    // Expand all ancestor dirs
     const normPath = dirPath.replace(/\\/g, '/');
     const parts = normPath.split('/');
     const expanded = new Set(store.expandedDirs);
-    for (let i = 1; i <= parts.length; i++) {
+    for (let i = normProject.split('/').length + 1; i <= parts.length; i++) {
       expanded.add(parts.slice(0, i).join('/'));
     }
     useAppStore.setState({ expandedDirs: expanded });
@@ -39,33 +47,37 @@ const Breadcrumb: React.FC = () => {
     fontSize: 12,
     color: 'var(--text-muted)',
     cursor: 'pointer',
-    padding: '1px 2px',
+    padding: '1px 4px',
     borderRadius: 3,
     transition: 'color 0.15s, background 0.15s',
     whiteSpace: 'nowrap',
   };
 
   const fileStyle: React.CSSProperties = {
-    ...segStyle,
+    fontSize: 12,
     color: 'var(--text-primary)',
     cursor: 'default',
-    fontWeight: 500,
+    fontWeight: 600,
+    padding: '1px 4px',
+    borderRadius: 3,
+    whiteSpace: 'nowrap',
   };
 
   const separatorStyle: React.CSSProperties = {
-    fontSize: 12,
-    color: 'var(--border-color)',
-    padding: '0 2px',
+    fontSize: 14,
+    color: 'var(--text-muted)',
+    padding: '0 1px',
     userSelect: 'none',
+    fontWeight: 300,
   };
 
   return (
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      height: 26,
-      padding: '0 12px',
-      background: 'var(--bg-primary)',
+      height: 28,
+      padding: '0 10px',
+      background: 'var(--bg-secondary)',
       borderBottom: '1px solid var(--border-color)',
       overflowX: 'auto',
       flexShrink: 0,
@@ -75,19 +87,19 @@ const Breadcrumb: React.FC = () => {
         const isLast = i === segments.length - 1;
         return (
           <React.Fragment key={i}>
-            {i > 0 && <span style={separatorStyle}>/</span>}
+            {i > 0 && <span style={separatorStyle}>›</span>}
             <span
               style={isLast ? fileStyle : segStyle}
               onClick={isLast ? undefined : () => handleSegmentClick(i)}
               onMouseEnter={isLast ? undefined : (e) => {
                 (e.currentTarget as HTMLElement).style.color = 'var(--accent-color)';
-                (e.currentTarget as HTMLElement).style.background = 'rgba(88,166,255,0.08)';
+                (e.currentTarget as HTMLElement).style.background = 'rgba(88,166,255,0.1)';
               }}
               onMouseLeave={isLast ? undefined : (e) => {
                 (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)';
                 (e.currentTarget as HTMLElement).style.background = 'transparent';
               }}
-              title={isLast ? activeTab : `Navigate to ${seg}`}
+              title={isLast ? activeTab : `Go to ${seg}`}
             >
               {seg}
             </span>
