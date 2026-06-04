@@ -7,7 +7,26 @@ const Breadcrumb: React.FC = () => {
   const projectName = useAppStore((s) => s.projectName);
   const setActiveSidebar = useAppStore((s) => s.setActiveSidebar);
 
-  if (!activeTab || !projectPath) return null;
+  if (!activeTab) return null;
+
+  // Fallback: if no project path, just show the full file path
+  if (!projectPath) {
+    const fullSegments = activeTab.replace(/\\/g, '/').split('/');
+    return (
+      <div style={{
+        display: 'flex', alignItems: 'center', height: 28, padding: '0 10px',
+        background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)',
+        overflowX: 'auto', flexShrink: 0,
+      }}>
+        <span style={{ fontSize: 12, color: 'var(--text-primary)', fontWeight: 600, padding: '1px 4px' }}>
+          {fullSegments[fullSegments.length - 1]}
+        </span>
+        <span style={{ fontSize: 11, color: 'var(--text-muted)', marginLeft: 8 }}>
+          {activeTab}
+        </span>
+      </div>
+    );
+  }
 
   // Calculate relative path from project root
   const normProject = projectPath.replace(/\\/g, '/').replace(/\/$/, '');
