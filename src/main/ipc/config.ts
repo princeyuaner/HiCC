@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { ipcMain, BrowserWindow } from 'electron';
 import { IPC_CHANNELS } from '../../shared/constants';
 import {
   getProfiles,
@@ -14,6 +14,8 @@ import {
   saveMcpServers,
   getFormatOnSave,
   setFormatOnSave,
+  getLanguage,
+  setLanguage,
 } from '../store/config-store';
 import { readClaudeSettings, writeClaudeModels, writeClaudeAuth } from '../services/claude-settings';
 import type { ApiProfile } from '../../shared/types';
@@ -94,6 +96,18 @@ export function registerConfigHandlers(): void {
 
   ipcMain.handle(IPC_CHANNELS.CONFIG_SET_FORMAT_SETTINGS, (_event, settings: { formatOnSave: boolean }) => {
     setFormatOnSave(settings.formatOnSave);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.CONFIG_GET_LANGUAGE, () => {
+    return getLanguage();
+  });
+
+  ipcMain.handle(IPC_CHANNELS.CONFIG_SET_LANGUAGE, (_event, lang: string) => {
+    setLanguage(lang);
+    // Notify all renderer windows about language change
+    for (const win of BrowserWindow.getAllWindows()) {
+      win.webContents.send(IPC_CHANNELS.LOCALE_CHANGED, lang);
+    }
   });
 }
 

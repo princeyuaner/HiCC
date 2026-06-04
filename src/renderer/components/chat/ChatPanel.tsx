@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppStore, selectActiveProfile } from '../../store/app-store';
 import MessageList from './MessageList';
 import InputBox from './InputBox';
@@ -41,6 +42,7 @@ const EFFORT_OPTIONS: { key: string; label: string }[] = [
 ];
 
 const ChatPanel: React.FC = () => {
+  const { t } = useTranslation();
   const messages = useAppStore((s) => s.messages);
   const addMessage = useAppStore((s) => s.addMessage);
   const setStreaming = useAppStore((s) => s.setStreaming);
@@ -337,7 +339,7 @@ const ChatPanel: React.FC = () => {
     : '';
   const currentModelLabel = currentModelName || MODEL_OPTIONS.find((o) => o.key === activeModelKey)?.label || 'Sonnet';
   const activeConv = conversations.find((c) => c.id === activeConversationId);
-  const convTitle = activeConv?.title || 'New Chat';
+  const convTitle = activeConv?.title || t('chat.newChat');
 
   return (
     <div className={styles.panel}>
@@ -389,7 +391,7 @@ const ChatPanel: React.FC = () => {
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
-                const title = renameText.trim() || 'New Chat';
+                const title = renameText.trim() || t('chat.newChat');
                 window.hicc.saveConversation({
                   id: activeConversationId!,
                   title,
@@ -508,7 +510,7 @@ const ChatPanel: React.FC = () => {
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap',
                         }}>
-                          {conv.title || 'New Chat'}
+                          {conv.title || t('chat.newChat')}
                         </div>
                         <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 1 }}>
                           {new Date(conv.updatedAt).toLocaleDateString()}
@@ -729,7 +731,7 @@ const ChatPanel: React.FC = () => {
 
 function getConversationTitle(messages: { role: string; content: string }[]): string {
   const firstUser = messages.find((m) => m.role === 'user');
-  if (!firstUser) return 'New Chat';
+  if (!firstUser) return t('chat.newChat');
   return firstUser.content.slice(0, 40) + (firstUser.content.length > 40 ? '...' : '');
 }
 

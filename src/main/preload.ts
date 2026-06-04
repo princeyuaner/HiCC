@@ -202,6 +202,13 @@ const api = {
   getFormatSettings: () => ipcRenderer.invoke('config:get-format-settings'),
   setFormatSettings: (settings: { formatOnSave: boolean }) =>
     ipcRenderer.invoke('config:set-format-settings', settings),
+
+  // Locale
+  getLanguage: () => ipcRenderer.invoke('config:get-language'),
+  setLanguage: (lang: string) => ipcRenderer.invoke('config:set-language', lang),
+  onLanguageChanged: (callback: (lang: string) => void) => {
+    ipcRenderer.on('locale:changed', (_event, lang) => callback(lang));
+  },
 };
 
 contextBridge.exposeInMainWorld('hicc', api);

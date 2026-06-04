@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../../store/app-store';
 import SftpDialog from './SftpDialog';
 import type { SshConfig, FileNode } from '../../../shared/types';
@@ -8,6 +9,7 @@ interface ToolbarProps {
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({ projectName }) => {
+  const { t } = useTranslation();
   const toggleTheme = useAppStore((s) => s.toggleTheme);
   const theme = useAppStore((s) => s.theme);
   const setActiveSidebar = useAppStore((s) => s.setActiveSidebar);
@@ -113,7 +115,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ projectName }) => {
           onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--bg-hover)'; }}
           onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--bg-tertiary)'; }}
         >
-          Open Project
+          {t('toolbar.openProject')}
         </button>
         {isRemoteConnected ? (
           <button
@@ -134,7 +136,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ projectName }) => {
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(63, 185, 80, 0.2)'; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(63, 185, 80, 0.1)'; }}
           >
-            Disconnect
+            {t('sftp.disconnect')}
           </button>
         ) : (
           <button
@@ -154,7 +156,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ projectName }) => {
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--bg-tertiary)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)'; }}
           >
-            Remote
+            {t('toolbar.remote')}
           </button>
         )}
         <span style={{

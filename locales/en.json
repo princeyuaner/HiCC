@@ -1,0 +1,280 @@
+{
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "loading": "Loading...",
+    "noData": "No data",
+    "confirm": "Confirm",
+    "search": "Search",
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "dismiss": "Dismiss",
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+  "toolbar": {
+    "openProject": "Open Project",
+    "settings": "Settings",
+    "remote": "Remote"
+  },
+  "sidebar": {
+    "files": "Files",
+    "search": "Search",
+    "git": "Git",
+    "review": "Review",
+    "svn": "SVN",
+    "settings": "Settings",
+    "explorer": "Explorer"
+  },
+  "statusBar": {
+    "line": "Ln",
+    "column": "Col",
+    "noProject": "No project",
+    "scanning": "Scanning..."
+  },
+  "editor": {
+    "noFileOpen": "Select a file to edit",
+    "noProject": "No project open",
+    "loading": "Loading...",
+    "saveFile": "Save File",
+    "formatDocument": "Format Document",
+    "contextMenu": {
+      "explain": "Explain",
+      "fix": "Fix",
+      "refactor": "Refactor",
+      "sendToChat": "Send selection to chat"
+    }
+  },
+  "fileExplorer": {
+    "noFiles": "No files",
+    "confirmDelete": "Delete \"{name}\"?",
+    "rename": "Rename",
+    "newFile": "New File",
+    "newFolder": "New Folder"
+  },
+  "chat": {
+    "title": "Chat",
+    "newChat": "New Chat",
+    "deleteConversation": "Delete conversation",
+    "send": "Send",
+    "stop": "Stop",
+    "interrupt": "Interrupt",
+    "inputPlaceholder": "Describe what you want to build, and Claude will help you write the code",
+    "emptyState": "Start a conversation to begin coding",
+    "editing": "Edit",
+    "cancelEdit": "Cancel",
+    "thinking": "Thinking...",
+    "modelMenu": "Model",
+    "permissionMode": "Permission",
+    "contextUsage": "Context",
+    "attachments": "Attachments",
+    "examples": {
+      "loginForm": "Create a React component for a login form",
+      "explainCodebase": "Explain how the codebase is organized",
+      "unitTests": "Write unit tests for the auth module",
+      "refactor": "Refactor the state management",
+      "errorHandling": "Add error handling to the API client",
+      "perfOptimize": "Optimize the chat rendering performance"
+    }
+  },
+  "terminal": {
+    "title": "Terminal",
+    "newTerminal": "New Terminal",
+    "killTerminal": "Kill Terminal",
+    "noProject": "Open a project to use the terminal",
+    "clear": "Clear"
+  },
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "profiles": "Profiles",
+      "mcp": "MCP",
+      "models": "Models",
+      "general": "General",
+      "plugins": "Plugins"
+    },
+    "profiles": {
+      "noProfiles": "No profiles. Add one to get started.",
+      "addProfile": "+ Add Profile",
+      "profileName": "Profile Name",
+      "baseUrl": "Base URL",
+      "apiKey": "API Key",
+      "sonnetModel": "Sonnet Model",
+      "opusModel": "Opus Model",
+      "smallFastModel": "Haiku / Small Model",
+      "systemPrompt": "System Prompt",
+      "temperature": "Temperature",
+      "maxTokens": "Max Output Tokens",
+      "thinkingEnabled": "Enable Extended Thinking",
+      "thinkingBudget": "Thinking Token Budget",
+      "del": "Del",
+      "editProfile": "Edit",
+      "saveProfile": "Save",
+      "cancel": "Cancel"
+    },
+    "mcp": {
+      "addServer": "+ Add MCP Server",
+      "serverName": "Server Name",
+      "transportType": "Transport Type",
+      "stdio": "stdio",
+      "sse": "SSE / HTTP",
+      "command": "Command",
+      "args": "Arguments (space-separated)",
+      "env": "Environment (KEY=VALUE per line)",
+      "url": "URL",
+      "remove": "Remove"
+    },
+    "models": {
+      "comingSoon": "Model settings coming soon — configure custom models, fallback behavior, and model-specific parameters."
+    },
+    "general": {
+      "comingSoon": "General settings coming soon — theme, editor preferences, keyboard shortcuts, and more.",
+      "theme": "Theme",
+      "themeHint": "Toggle between dark and light appearance",
+      "formatOnSave": "Format on Save",
+      "formatOnSaveHint": "Automatically format code with Prettier when saving (Ctrl+S)",
+      "language": "Language",
+      "languageHint": "Select the user interface language",
+      "shortcuts": "Keyboard Shortcuts",
+      "shortcutFormat": "Shift+Alt+F — Format current document",
+      "shortcutSave": "Ctrl+S — Save file (with optional format on save)",
+      "checkUpdates": "Check for Updates",
+      "autoCheckUpdates": "Automatically check for updates",
+      "currentVersion": "Current Version"
+    }
+  },
+  "git": {
+    "title": "Git",
+    "branch": "Branch",
+    "status": "Status",
+    "diff": "Diff",
+    "stage": "Stage",
+    "unstage": "Unstage",
+    "commit": "Commit",
+    "commitMessage": "Commit message",
+    "push": "Push",
+    "pull": "Pull",
+    "branches": "Branches",
+    "checkout": "Checkout",
+    "log": "Log",
+    "noChanges": "No changes",
+    "modified": "Modified",
+    "added": "Added",
+    "deleted": "Deleted",
+    "renamed": "Renamed"
+  },
+  "svn": {
+    "title": "SVN",
+    "status": "Status",
+    "diff": "Diff",
+    "add": "Add",
+    "revert": "Revert",
+    "commit": "Commit",
+    "commitMessage": "Commit message",
+    "update": "Update",
+    "info": "Info",
+    "noChanges": "No changes"
+  },
+  "review": {
+    "title": "Code Review",
+    "startReview": "Start Review",
+    "analyzing": "Analyzing...",
+    "scope": "Scope",
+    "working": "Working changes",
+    "staged": "Staged changes",
+    "head": "HEAD commit",
+    "commit": "Specific commit",
+    "summary": "Summary",
+    "findings": "Findings",
+    "noFindings": "No issues found",
+    "severity": {
+      "critical": "Critical",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "info": "Info"
+    }
+  },
+  "search": {
+    "title": "Search",
+    "searchPlaceholder": "Search files by name or content...",
+    "fileTypes": "Files to include (e.g. *.ts, *.tsx, *.json)",
+    "caseSensitive": "Case sensitive",
+    "wholeWord": "Whole word",
+    "useRegex": "Regex",
+    "noResults": "No results found",
+    "results": "{count} results",
+    "replace": "Replace"
+  },
+  "diff": {
+    "accept": "Accept",
+    "reject": "Reject",
+    "acceptAll": "Accept All",
+    "original": "Original",
+    "modified": "Modified"
+  },
+  "toolConfirm": {
+    "title": "Tool Confirmation",
+    "allow": "Allow",
+    "deny": "Deny",
+    "alwaysAllow": "Always allow",
+    "toolWillRead": "Read file",
+    "toolWillWrite": "Write file",
+    "toolWillEdit": "Edit file",
+    "toolWillRun": "Run command"
+  },
+  "askQuestion": {
+    "title": "Claude needs your input",
+    "submit": "Submit"
+  },
+  "palette": {
+    "searchFiles": "Search files by name...",
+    "typeCommand": "Type a command...",
+    "commands": {
+      "gitShow": "Git: Show Git Panel",
+      "searchShow": "View: Show Search",
+      "reviewShow": "View: Show Review",
+      "settingsShow": "Preferences: Open Settings",
+      "toggleTheme": "Preferences: Toggle Theme",
+      "chatNew": "Chat: New Conversation",
+      "terminalCreate": "Terminal: New Terminal",
+      "fileFormat": "Editor: Format Document",
+      "fileSave": "File: Save"
+    }
+  },
+  "sftp": {
+    "title": "Remote Connection",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "host": "Host",
+    "port": "Port",
+    "username": "Username",
+    "password": "Password",
+    "privateKey": "Private Key",
+    "rootPath": "Root Path",
+    "name": "Name",
+    "connected": "Connected",
+    "disconnected": "Disconnected"
+  },
+  "update": {
+    "checking": "Checking for updates...",
+    "available": "Version {version} available",
+    "downloading": "Downloading...",
+    "downloaded": "Update ready — restart to install",
+    "installNow": "Restart to Install",
+    "installOnQuit": "Install on Quit",
+    "error": "Update check failed",
+    "upToDate": "HICC is up to date"
+  },
+  "error": {
+    "title": "Error",
+    "unknown": "An unknown error occurred",
+    "retry": "Please try again",
+    "boundary": "Something went wrong"
+  }
+}

@@ -66,6 +66,10 @@ export const IPC_CHANNELS = {
   CONFIG_FORMAT_DOCUMENT: 'config:format-document',
   CONFIG_GET_FORMAT_SETTINGS: 'config:get-format-settings',
   CONFIG_SET_FORMAT_SETTINGS: 'config:set-format-settings',
+  // Locale
+  CONFIG_GET_LANGUAGE: 'config:get-language',
+  CONFIG_SET_LANGUAGE: 'config:set-language',
+  LOCALE_CHANGED: 'locale:changed',
   // Session
   SESSION_SAVE: 'session:save',
   SESSION_RESTORE: 'session:restore',

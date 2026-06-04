@@ -6,6 +6,7 @@ interface ConfigSchema {
   activeProfileId: string | null;
   recentProjects: string[];
   theme: 'light' | 'dark';
+  language: string;
   mcpServers: Record<string, McpServerConfig>;
   formatOnSave: boolean;
   sessionState: {
@@ -22,6 +23,7 @@ const store = new Store<ConfigSchema>({
     activeProfileId: null,
     recentProjects: [],
     theme: 'dark',
+    language: 'en',
     mcpServers: {},
     formatOnSave: false,
     sessionState: null,
@@ -205,4 +207,12 @@ export function getFormatOnSave(): boolean {
 
 export function setFormatOnSave(formatOnSave: boolean): void {
   store.set('formatOnSave', formatOnSave);
+}
+
+export function getLanguage(): string {
+  return store.get('language');
+}
+
+export function setLanguage(lang: string): void {
+  store.set('language', lang);
 }

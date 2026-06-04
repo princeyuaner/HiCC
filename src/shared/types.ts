@@ -365,6 +365,11 @@ export interface HiccApi {
   getFormatSettings: () => Promise<FormatSettings>;
   setFormatSettings: (settings: FormatSettings) => Promise<void>;
 
+  // Locale
+  getLanguage: () => Promise<string>;
+  setLanguage: (lang: string) => Promise<void>;
+  onLanguageChanged: (callback: (lang: string) => void) => void;
+
   // MCP servers
   getMcpServers: () => Promise<Record<string, McpServerConfig>>;
   saveMcpServers: (servers: Record<string, unknown>) => Promise<void>;

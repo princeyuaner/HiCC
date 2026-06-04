@@ -1,16 +1,18 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../../store/app-store';
 
 const Sidebar: React.FC = () => {
+  const { t } = useTranslation();
   const activeSidebar = useAppStore((s) => s.activeSidebar);
   const setActiveSidebar = useAppStore((s) => s.setActiveSidebar);
 
   const items = [
-    { id: 'files' as const, label: 'Files', icon: '📁' },
-    { id: 'search' as const, label: 'Search', icon: '🔍' },
-    { id: 'git' as const, label: 'Git', icon: '🔀' },
-    { id: 'review' as const, label: 'Review', icon: '🛡' },
-    { id: 'svn' as const, label: 'SVN', icon: '🔃' },
+    { id: 'files' as const, label: t('sidebar.files'), icon: '📁' },
+    { id: 'search' as const, label: t('sidebar.search'), icon: '🔍' },
+    { id: 'git' as const, label: t('sidebar.git'), icon: '🔀' },
+    { id: 'review' as const, label: t('sidebar.review'), icon: '🛡' },
+    { id: 'svn' as const, label: t('sidebar.svn'), icon: '🔃' },
   ];
 
   return (

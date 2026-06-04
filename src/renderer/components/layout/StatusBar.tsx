@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../../store/app-store';
 
 const StatusBar: React.FC = () => {
+  const { t } = useTranslation();
   const cursorLine = useAppStore((s) => s.cursorLine);
   const cursorColumn = useAppStore((s) => s.cursorColumn);
   const activeTab = useAppStore((s) => s.activeTab);
@@ -34,7 +36,7 @@ const StatusBar: React.FC = () => {
       gap: 16,
       userSelect: 'none',
     }}>
-      <span>Ln {cursorLine}, Col {cursorColumn}</span>
+      <span>{t('statusBar.line')} {cursorLine}, {t('statusBar.column')} {cursorColumn}</span>
       {ext && <span>{ext}</span>}
       <span style={{ flex: 1 }} />
       {statusBarMessage && (

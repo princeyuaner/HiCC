@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAppStore, selectActiveProfile, selectIsConfigured } from '../../store/app-store';
+import { changeLanguage } from '../../i18n';
 import type { ApiProfile } from '../../types';
 
 const labelStyle: React.CSSProperties = {
@@ -504,14 +505,21 @@ const GeneralSettings: React.FC = () => {
   const theme = useAppStore((s) => s.theme);
   const toggleTheme = useAppStore((s) => s.toggleTheme);
   const [formatOnSave, setFormatOnSave] = useState(false);
+  const [language, setLanguageState] = useState('en');
 
   useEffect(() => {
     window.hicc.getFormatSettings().then((s) => setFormatOnSave(s.formatOnSave)).catch(() => {});
+    window.hicc.getLanguage().then((l) => setLanguageState(l)).catch(() => {});
   }, []);
 
   const handleFormatToggle = (val: boolean) => {
     setFormatOnSave(val);
     window.hicc.setFormatSettings({ formatOnSave: val }).catch(() => {});
+  };
+
+  const handleLanguageChange = (lang: string) => {
+    setLanguageState(lang);
+    changeLanguage(lang);
   };
 
   const settingRow: React.CSSProperties = {
@@ -585,6 +593,29 @@ const GeneralSettings: React.FC = () => {
             transition: 'left 0.2s',
           }} />
         </button>
+      </div>
+
+      <div style={settingRow}>
+        <div>
+          <div style={settingLabel}>Language / 语言</div>
+          <div style={settingHint}>Select the user interface language</div>
+        </div>
+        <select
+          value={language}
+          onChange={(e) => handleLanguageChange(e.target.value)}
+          style={{
+            padding: '4px 8px',
+            borderRadius: 4,
+            border: '1px solid var(--border-color)',
+            background: 'var(--bg-primary)',
+            color: 'var(--text-primary)',
+            fontSize: 13,
+            cursor: 'pointer',
+          }}
+        >
+          <option value="en">English</option>
+          <option value="zh-CN">中文 (简体)</option>
+        </select>
       </div>
 
       <div style={{ ...settingRow, borderBottom: 'none' }}>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import Editor, { OnMount } from '@monaco-editor/react';
 import type * as Monaco from 'monaco-editor';
 import { useAppStore } from '../../store/app-store';
@@ -15,6 +16,7 @@ interface ContextMenuState {
 }
 
 const CodeEditor: React.FC = () => {
+  const { t } = useTranslation();
   const activeTab = useAppStore((s) => s.activeTab);
   const openTabs = useAppStore((s) => s.openTabs);
   const theme = useAppStore((s) => s.theme);
@@ -351,9 +353,9 @@ const CodeEditor: React.FC = () => {
             padding: '4px 0',
           }}
         >
-          <MenuItem label="Explain" onClick={handleExplain} />
-          <MenuItem label="Fix" onClick={handleFix} />
-          <MenuItem label="Refactor" onClick={handleRefactor} />
+          <MenuItem label={t('editor.contextMenu.explain')} onClick={handleExplain} />
+          <MenuItem label={t('editor.contextMenu.fix')} onClick={handleFix} />
+          <MenuItem label={t('editor.contextMenu.refactor')} onClick={handleRefactor} />
           <div style={{ height: 1, background: 'var(--border-color)', margin: '4px 0' }} />
           <MenuItem label="Send selection to chat" onClick={handleSendToChat} />
         </div>

@@ -1,0 +1,280 @@
+{
+  "common": {
+    "ok": "确定",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "close": "关闭",
+    "back": "返回",
+    "loading": "加载中...",
+    "noData": "暂无数据",
+    "confirm": "确认",
+    "search": "搜索",
+    "refresh": "刷新",
+    "retry": "重试",
+    "dismiss": "忽略",
+    "enabled": "已启用",
+    "disabled": "已禁用"
+  },
+  "toolbar": {
+    "openProject": "打开项目",
+    "settings": "设置",
+    "remote": "远程"
+  },
+  "sidebar": {
+    "files": "文件",
+    "search": "搜索",
+    "git": "Git",
+    "review": "审查",
+    "svn": "SVN",
+    "settings": "设置",
+    "explorer": "资源管理器"
+  },
+  "statusBar": {
+    "line": "行",
+    "column": "列",
+    "noProject": "无项目",
+    "scanning": "扫描中..."
+  },
+  "editor": {
+    "noFileOpen": "选择文件以编辑",
+    "noProject": "未打开项目",
+    "loading": "加载中...",
+    "saveFile": "保存文件",
+    "formatDocument": "格式化文档",
+    "contextMenu": {
+      "explain": "解释代码",
+      "fix": "修复问题",
+      "refactor": "重构代码",
+      "sendToChat": "发送选中内容到对话"
+    }
+  },
+  "fileExplorer": {
+    "noFiles": "无文件",
+    "confirmDelete": "删除 \"{name}\" ？",
+    "rename": "重命名",
+    "newFile": "新建文件",
+    "newFolder": "新建文件夹"
+  },
+  "chat": {
+    "title": "对话",
+    "newChat": "新建对话",
+    "deleteConversation": "删除对话",
+    "send": "发送",
+    "stop": "停止",
+    "interrupt": "中断",
+    "inputPlaceholder": "描述你想要构建的内容，Claude 将帮助你编写代码",
+    "emptyState": "开始对话以进行编程",
+    "editing": "编辑",
+    "cancelEdit": "取消",
+    "thinking": "思考中...",
+    "modelMenu": "模型",
+    "permissionMode": "权限",
+    "contextUsage": "上下文",
+    "attachments": "附件",
+    "examples": {
+      "loginForm": "创建一个 React 登录表单组件",
+      "explainCodebase": "解释代码库的组织结构",
+      "unitTests": "为认证模块编写单元测试",
+      "refactor": "重构状态管理",
+      "errorHandling": "为 API 客户端添加错误处理",
+      "perfOptimize": "优化对话渲染性能"
+    }
+  },
+  "terminal": {
+    "title": "终端",
+    "newTerminal": "新建终端",
+    "killTerminal": "关闭终端",
+    "noProject": "打开项目以使用终端",
+    "clear": "清屏"
+  },
+  "settings": {
+    "title": "设置",
+    "tabs": {
+      "profiles": "配置文件",
+      "mcp": "MCP",
+      "models": "模型",
+      "general": "常规",
+      "plugins": "插件"
+    },
+    "profiles": {
+      "noProfiles": "暂无配置文件，点击添加以开始使用。",
+      "addProfile": "+ 添加配置文件",
+      "profileName": "配置名称",
+      "baseUrl": "Base URL",
+      "apiKey": "API 密钥",
+      "sonnetModel": "Sonnet 模型",
+      "opusModel": "Opus 模型",
+      "smallFastModel": "Haiku / 小模型",
+      "systemPrompt": "系统提示词",
+      "temperature": "温度",
+      "maxTokens": "最大输出 Token",
+      "thinkingEnabled": "启用扩展思考",
+      "thinkingBudget": "思考 Token 预算",
+      "del": "删除",
+      "editProfile": "编辑",
+      "saveProfile": "保存",
+      "cancel": "取消"
+    },
+    "mcp": {
+      "addServer": "+ 添加 MCP 服务器",
+      "serverName": "服务器名称",
+      "transportType": "传输类型",
+      "stdio": "stdio",
+      "sse": "SSE / HTTP",
+      "command": "命令",
+      "args": "参数（空格分隔）",
+      "env": "环境变量（每行 KEY=VALUE）",
+      "url": "URL",
+      "remove": "移除"
+    },
+    "models": {
+      "comingSoon": "模型设置即将上线 — 配置自定义模型、回退行为和模型特定参数。"
+    },
+    "general": {
+      "comingSoon": "常规设置即将上线 — 主题、编辑器偏好、键盘快捷键等。",
+      "theme": "主题",
+      "themeHint": "切换深色和浅色外观",
+      "formatOnSave": "保存时格式化",
+      "formatOnSaveHint": "保存时自动使用 Prettier 格式化代码（Ctrl+S）",
+      "language": "语言",
+      "languageHint": "选择界面显示语言",
+      "shortcuts": "键盘快捷键",
+      "shortcutFormat": "Shift+Alt+F — 格式化当前文档",
+      "shortcutSave": "Ctrl+S — 保存文件（可开启保存时格式化）",
+      "checkUpdates": "检查更新",
+      "autoCheckUpdates": "自动检查更新",
+      "currentVersion": "当前版本"
+    }
+  },
+  "git": {
+    "title": "Git",
+    "branch": "分支",
+    "status": "状态",
+    "diff": "差异",
+    "stage": "暂存",
+    "unstage": "取消暂存",
+    "commit": "提交",
+    "commitMessage": "提交信息",
+    "push": "推送",
+    "pull": "拉取",
+    "branches": "分支列表",
+    "checkout": "切换分支",
+    "log": "日志",
+    "noChanges": "无变更",
+    "modified": "已修改",
+    "added": "已添加",
+    "deleted": "已删除",
+    "renamed": "已重命名"
+  },
+  "svn": {
+    "title": "SVN",
+    "status": "状态",
+    "diff": "差异",
+    "add": "添加",
+    "revert": "还原",
+    "commit": "提交",
+    "commitMessage": "提交信息",
+    "update": "更新",
+    "info": "信息",
+    "noChanges": "无变更"
+  },
+  "review": {
+    "title": "代码审查",
+    "startReview": "开始审查",
+    "analyzing": "分析中...",
+    "scope": "范围",
+    "working": "工作区变更",
+    "staged": "已暂存变更",
+    "head": "HEAD 提交",
+    "commit": "指定提交",
+    "summary": "摘要",
+    "findings": "发现",
+    "noFindings": "未发现问题",
+    "severity": {
+      "critical": "严重",
+      "high": "高",
+      "medium": "中",
+      "low": "低",
+      "info": "信息"
+    }
+  },
+  "search": {
+    "title": "搜索",
+    "searchPlaceholder": "按文件名或内容搜索...",
+    "fileTypes": "包含文件类型（如 *.ts, *.tsx, *.json）",
+    "caseSensitive": "区分大小写",
+    "wholeWord": "全词匹配",
+    "useRegex": "正则表达式",
+    "noResults": "未找到结果",
+    "results": "{count} 个结果",
+    "replace": "替换"
+  },
+  "diff": {
+    "accept": "接受",
+    "reject": "拒绝",
+    "acceptAll": "全部接受",
+    "original": "原始",
+    "modified": "修改后"
+  },
+  "toolConfirm": {
+    "title": "工具确认",
+    "allow": "允许",
+    "deny": "拒绝",
+    "alwaysAllow": "始终允许",
+    "toolWillRead": "读取文件",
+    "toolWillWrite": "写入文件",
+    "toolWillEdit": "编辑文件",
+    "toolWillRun": "运行命令"
+  },
+  "askQuestion": {
+    "title": "Claude 需要你的输入",
+    "submit": "提交"
+  },
+  "palette": {
+    "searchFiles": "按文件名搜索...",
+    "typeCommand": "输入命令...",
+    "commands": {
+      "gitShow": "Git: 显示 Git 面板",
+      "searchShow": "视图: 显示搜索",
+      "reviewShow": "视图: 显示代码审查",
+      "settingsShow": "偏好: 打开设置",
+      "toggleTheme": "偏好: 切换主题",
+      "chatNew": "对话: 新建对话",
+      "terminalCreate": "终端: 新建终端",
+      "fileFormat": "编辑器: 格式化文档",
+      "fileSave": "文件: 保存"
+    }
+  },
+  "sftp": {
+    "title": "远程连接",
+    "connect": "连接",
+    "disconnect": "断开连接",
+    "host": "主机",
+    "port": "端口",
+    "username": "用户名",
+    "password": "密码",
+    "privateKey": "私钥",
+    "rootPath": "根目录",
+    "name": "名称",
+    "connected": "已连接",
+    "disconnected": "未连接"
+  },
+  "update": {
+    "checking": "正在检查更新...",
+    "available": "发现新版本 {version}",
+    "downloading": "正在下载...",
+    "downloaded": "更新已就绪 — 重启以安装",
+    "installNow": "重启安装",
+    "installOnQuit": "退出时安装",
+    "error": "检查更新失败",
+    "upToDate": "HICC 已是最新版本"
+  },
+  "error": {
+    "title": "错误",
+    "unknown": "发生未知错误",
+    "retry": "请重试",
+    "boundary": "出了点问题"
+  }
+}
