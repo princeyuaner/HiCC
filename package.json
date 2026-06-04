@@ -23,6 +23,7 @@
     "better-sqlite3": "^12.10.0",
     "chokidar": "^5.0.0",
     "electron-store": "^8.2.0",
+    "electron-updater": "^6.8.3",
     "i18next": "^26.3.1",
     "i18next-fs-backend": "^2.6.6",
     "node-pty": "^1.1.0",

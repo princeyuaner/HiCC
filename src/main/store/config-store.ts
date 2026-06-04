@@ -7,6 +7,7 @@ interface ConfigSchema {
   recentProjects: string[];
   theme: 'light' | 'dark';
   language: string;
+  autoCheckUpdates: boolean;
   mcpServers: Record<string, McpServerConfig>;
   formatOnSave: boolean;
   sessionState: {
@@ -24,6 +25,7 @@ const store = new Store<ConfigSchema>({
     recentProjects: [],
     theme: 'dark',
     language: 'en',
+    autoCheckUpdates: true,
     mcpServers: {},
     formatOnSave: false,
     sessionState: null,
@@ -215,4 +217,12 @@ export function getLanguage(): string {
 
 export function setLanguage(lang: string): void {
   store.set('language', lang);
+}
+
+export function getAutoCheckUpdates(): boolean {
+  return store.get('autoCheckUpdates');
+}
+
+export function setAutoCheckUpdates(autoCheck: boolean): void {
+  store.set('autoCheckUpdates', autoCheck);
 }

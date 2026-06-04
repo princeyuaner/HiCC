@@ -506,10 +506,12 @@ const GeneralSettings: React.FC = () => {
   const toggleTheme = useAppStore((s) => s.toggleTheme);
   const [formatOnSave, setFormatOnSave] = useState(false);
   const [language, setLanguageState] = useState('en');
+  const [autoCheckUpdates, setAutoCheckUpdates] = useState(true);
 
   useEffect(() => {
     window.hicc.getFormatSettings().then((s) => setFormatOnSave(s.formatOnSave)).catch(() => {});
     window.hicc.getLanguage().then((l) => setLanguageState(l)).catch(() => {});
+    window.hicc.getUpdateConfig().then((c) => setAutoCheckUpdates(c.autoCheck)).catch(() => {});
   }, []);
 
   const handleFormatToggle = (val: boolean) => {
@@ -616,6 +618,54 @@ const GeneralSettings: React.FC = () => {
           <option value="en">English</option>
           <option value="zh-CN">中文 (简体)</option>
         </select>
+      </div>
+
+      <div style={settingRow}>
+        <div>
+          <div style={settingLabel}>Auto-Check Updates</div>
+          <div style={settingHint}>Automatically check for updates on startup</div>
+        </div>
+        <button
+          style={{ ...toggleStyle, background: autoCheckUpdates ? 'var(--accent-color)' : 'var(--text-muted)' }}
+          onClick={() => {
+            const val = !autoCheckUpdates;
+            setAutoCheckUpdates(val);
+            window.hicc.setUpdateConfig({ autoCheck: val }).catch(() => {});
+          }}
+        >
+          <span style={{
+            position: 'absolute',
+            top: 2,
+            left: autoCheckUpdates ? 20 : 2,
+            width: 18,
+            height: 18,
+            borderRadius: '50%',
+            background: '#fff',
+            transition: 'left 0.2s',
+          }} />
+        </button>
+      </div>
+
+      <div style={settingRow}>
+        <div>
+          <div style={settingLabel}>Check for Updates</div>
+          <div style={settingHint}>Version {(() => { try { const pkg = require('../../../../package.json'); return pkg.version; } catch { return '0.1.0'; } })()}</div>
+        </div>
+        <button
+          onClick={() => window.hicc.checkForUpdates().catch(() => {})}
+          style={{
+            padding: '6px 14px',
+            borderRadius: 8,
+            border: '1px solid var(--accent-color)',
+            background: 'transparent',
+            color: 'var(--accent-color)',
+            cursor: 'pointer',
+            fontSize: 12,
+            fontWeight: 500,
+          }}
+        >
+          Check
+        </button>
       </div>
 
       <div style={{ ...settingRow, borderBottom: 'none' }}>

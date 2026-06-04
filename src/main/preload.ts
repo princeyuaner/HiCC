@@ -209,6 +209,16 @@ const api = {
   onLanguageChanged: (callback: (lang: string) => void) => {
     ipcRenderer.on('locale:changed', (_event, lang) => callback(lang));
   },
+
+  // Update
+  checkForUpdates: () => ipcRenderer.invoke('update:check'),
+  downloadUpdate: () => ipcRenderer.invoke('update:download'),
+  installUpdate: () => ipcRenderer.invoke('update:install'),
+  onUpdateStatusChanged: (callback: (status: unknown) => void) => {
+    ipcRenderer.on('update:status-changed', (_event, status) => callback(status));
+  },
+  getUpdateConfig: () => ipcRenderer.invoke('update:get-config'),
+  setUpdateConfig: (config: { autoCheck: boolean }) => ipcRenderer.invoke('update:set-config', config),
 };
 
 contextBridge.exposeInMainWorld('hicc', api);

@@ -370,6 +370,14 @@ export interface HiccApi {
   setLanguage: (lang: string) => Promise<void>;
   onLanguageChanged: (callback: (lang: string) => void) => void;
 
+  // Update
+  checkForUpdates: () => Promise<void>;
+  downloadUpdate: () => Promise<void>;
+  installUpdate: () => Promise<void>;
+  onUpdateStatusChanged: (callback: (status: UpdateStatus) => void) => void;
+  getUpdateConfig: () => Promise<UpdateConfig>;
+  setUpdateConfig: (config: UpdateConfig) => Promise<void>;
+
   // MCP servers
   getMcpServers: () => Promise<Record<string, McpServerConfig>>;
   saveMcpServers: (servers: Record<string, unknown>) => Promise<void>;
@@ -423,6 +431,20 @@ export type FormatResponse = FormatResult | FormatError;
 
 export interface FormatSettings {
   formatOnSave: boolean;
+}
+
+// --- Auto Update ---
+
+export type UpdateStatus =
+  | { stage: 'idle' }
+  | { stage: 'checking' }
+  | { stage: 'available'; version: string; releaseNotes?: string; releaseDate?: string }
+  | { stage: 'downloading'; progress: number }
+  | { stage: 'downloaded'; version: string }
+  | { stage: 'error'; message: string };
+
+export interface UpdateConfig {
+  autoCheck: boolean;
 }
 
 declare global {

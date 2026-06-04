@@ -13,6 +13,7 @@ import { FileWatcherService } from './services/file-watcher';
 import { AnthropicClient } from './services/anthropic-client';
 import { TerminalManager } from './services/terminal-manager';
 import { getActiveProfile, migrateProfilesCleanAnsi } from './store/config-store';
+import { initUpdateService, startBackgroundCheck } from './services/update-service';
 import { setRemoteFileSystemService } from './ipc/sftp';
 import { setGitService } from './ipc/git';
 import { setSvnService } from './ipc/svn';
@@ -82,6 +83,10 @@ app.whenReady().then(() => {
 
   registerAllIpcHandlers(anthropicClient);
   createWindow();
+
+  // Initialize auto-update
+  initUpdateService();
+  startBackgroundCheck();
 });
 
 app.on('window-all-closed', () => {

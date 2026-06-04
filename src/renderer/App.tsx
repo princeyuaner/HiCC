@@ -13,6 +13,7 @@ import TerminalPanel from './components/terminal/TerminalPanel';
 import GitPanel from './components/git/GitPanel';
 import SvnPanel from './components/editor/SvnPanel';
 import StatusBar from './components/layout/StatusBar';
+import UpdateNotification from './components/layout/UpdateNotification';
 import Palette from './components/common/Palette';
 import ErrorBoundary from './components/common/ErrorBoundary';
 
@@ -215,6 +216,7 @@ const App: React.FC = () => {
       <Palette />
       <div className="app">
         <Toolbar projectName={projectName} />
+        <UpdateNotification />
         <div className="app-body">
           <Sidebar />
           {activeSidebar === 'files' && (

@@ -70,6 +70,13 @@ export const IPC_CHANNELS = {
   CONFIG_GET_LANGUAGE: 'config:get-language',
   CONFIG_SET_LANGUAGE: 'config:set-language',
   LOCALE_CHANGED: 'locale:changed',
+  // Update
+  UPDATE_CHECK: 'update:check',
+  UPDATE_DOWNLOAD: 'update:download',
+  UPDATE_INSTALL: 'update:install',
+  UPDATE_STATUS_CHANGED: 'update:status-changed',
+  UPDATE_GET_CONFIG: 'update:get-config',
+  UPDATE_SET_CONFIG: 'update:set-config',
   // Session
   SESSION_SAVE: 'session:save',
   SESSION_RESTORE: 'session:restore',

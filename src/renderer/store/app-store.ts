@@ -243,6 +243,10 @@ interface AppState {
   // Status bar message
   statusBarMessage: string | null;
   setStatusBarMessage: (msg: string | null) => void;
+
+  // Auto update
+  updateStatus: import('../../shared/types').UpdateStatus | null;
+  setUpdateStatus: (status: import('../../shared/types').UpdateStatus | null) => void;
 }
 
 export const selectActiveProfile = (state: AppState): ApiProfile | undefined =>
@@ -1129,4 +1133,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       }, 5000);
     }
   },
+
+  updateStatus: null,
+  setUpdateStatus: (status) => set({ updateStatus: status }),
 }));
