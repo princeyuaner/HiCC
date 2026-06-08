@@ -327,7 +327,13 @@ const CodeEditor: React.FC = () => {
         onChange={handleContentChange}
         onMount={handleEditorMount}
         options={{
-          minimap: { enabled: false },
+          minimap: {
+            enabled: true,
+            showSlider: 'mouseover',
+            renderCharacters: false,
+            scale: 1,
+            maxColumn: 120,
+          },
           fontSize: 14,
           fontFamily: 'var(--font-mono, monospace)',
           lineNumbers: 'on',
